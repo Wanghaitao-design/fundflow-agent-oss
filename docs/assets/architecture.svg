@@ -1,0 +1,156 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="880" viewBox="0 0 1200 880" role="img" aria-labelledby="title desc">
+  <title id="title">Fundflow Agent architecture</title>
+  <desc id="desc">Four layers: AGH runtime, domain extension layer, compute layer, and data and artifacts.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#475569"/>
+    </marker>
+    <style>
+      .title { font: 700 26px "Segoe UI", Arial, sans-serif; fill: #0f172a; }
+      .subtitle { font: 400 14px "Segoe UI", Arial, sans-serif; fill: #475569; }
+      .band-label { font: 700 13px "Segoe UI", Arial, sans-serif; letter-spacing: .04em; }
+      .box-title { font: 700 15px "Segoe UI", Arial, sans-serif; fill: #0f172a; }
+      .box-body { font: 400 12.5px "Segoe UI", Arial, sans-serif; fill: #334155; }
+      .box-mono { font: 400 12px Consolas, "Courier New", monospace; fill: #1e3a8a; }
+      .footer { font: 400 12px "Segoe UI", Arial, sans-serif; fill: #64748b; }
+      .arrow-label { font: 600 11px "Segoe UI", Arial, sans-serif; fill: #64748b; }
+    </style>
+  </defs>
+
+  <rect width="1200" height="880" fill="#ffffff"/>
+  <text x="40" y="42" class="title">Fundflow Agent — Architecture</text>
+  <text x="40" y="66" class="subtitle">Seven-stage investigation workflow, deterministic tools, and governance hooks on top of Agnes Harness (AGH)</text>
+
+  <!-- Layer 1 -->
+  <rect x="30" y="90" width="1140" height="150" rx="14" fill="#f8fafc" stroke="#cbd5e1"/>
+  <text x="50" y="116" class="band-label" fill="#1d4ed8">AGH RUNTIME · Agnes Harness, Apache-2.0, pinned upstream</text>
+
+  <rect x="50" y="128" width="265" height="96" rx="10" fill="#ffffff" stroke="#93c5fd"/>
+  <text x="66" y="152" class="box-title">Execution loop</text>
+  <text x="66" y="174" class="box-body">Turns, steps, stop gate</text>
+  <text x="66" y="194" class="box-body">Model / tool orchestration</text>
+  <text x="66" y="214" class="box-body">Session recovery</text>
+
+  <rect x="330" y="128" width="265" height="96" rx="10" fill="#ffffff" stroke="#93c5fd"/>
+  <text x="346" y="152" class="box-title">Event ledger</text>
+  <text x="346" y="174" class="box-body">Append-only facts</text>
+  <text x="346" y="194" class="box-body">Integrity chain</text>
+  <text x="346" y="214" class="box-body">Replay and accountability</text>
+
+  <rect x="610" y="128" width="265" height="96" rx="10" fill="#ffffff" stroke="#93c5fd"/>
+  <text x="626" y="152" class="box-title">Approvals &amp; sandbox</text>
+  <text x="626" y="174" class="box-body">Human decision before side effects</text>
+  <text x="626" y="194" class="box-body">Command and file boundaries</text>
+  <text x="626" y="214" class="box-body">Denied actions stay in the record</text>
+
+  <rect x="890" y="128" width="265" height="96" rx="10" fill="#ffffff" stroke="#93c5fd"/>
+  <text x="906" y="152" class="box-title">Capability interfaces</text>
+  <text x="906" y="174" class="box-body">MCP · Skills · Hooks · Providers</text>
+  <text x="906" y="194" class="box-body">Ten replaceable interfaces</text>
+  <text x="906" y="214" class="box-body">Protocol closure from schema</text>
+
+  <line x1="600" y1="240" x2="600" y2="262" stroke="#475569" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="612" y="258" class="arrow-label">registers and governs</text>
+
+  <!-- Layer 2 -->
+  <rect x="30" y="265" width="1140" height="240" rx="14" fill="#f0fdfa" stroke="#99f6e4"/>
+  <text x="50" y="291" class="band-label" fill="#0f766e">DOMAIN EXTENSION LAYER · assembled through AGH interfaces; upstream source unmodified</text>
+
+  <rect x="50" y="303" width="265" height="184" rx="10" fill="#ffffff" stroke="#5eead4"/>
+  <text x="66" y="327" class="box-title">3 Skills</text>
+  <text x="66" y="351" class="box-mono">fundflow-investigation</text>
+  <text x="66" y="371" class="box-body">Seven stages, evidence rules,</text>
+  <text x="66" y="389" class="box-body">knowledge slices per stage</text>
+  <text x="66" y="415" class="box-mono">fundflow-range</text>
+  <text x="66" y="435" class="box-body">Synthetic scenarios and evaluation</text>
+  <text x="66" y="461" class="box-mono">fundflow-verify</text>
+  <text x="66" y="481" class="box-body">Five-check acceptance</text>
+
+  <rect x="330" y="303" width="265" height="184" rx="10" fill="#ffffff" stroke="#5eead4"/>
+  <text x="346" y="327" class="box-title">11 MCP tools</text>
+  <text x="346" y="351" class="box-body">scan_dataset · build_fund_graph</text>
+  <text x="346" y="371" class="box-body">classify_tiers · detect_laundering</text>
+  <text x="346" y="391" class="box-body">scan_structure · rank_suspects</text>
+  <text x="346" y="411" class="box-body">trace_funds · profile_account</text>
+  <text x="346" y="431" class="box-body">export_evidence · simulate_case</text>
+  <text x="346" y="451" class="box-body">anonymize_dataset</text>
+  <text x="346" y="475" class="box-body">All computation stays in Python.</text>
+
+  <rect x="610" y="303" width="265" height="184" rx="10" fill="#ffffff" stroke="#5eead4"/>
+  <text x="626" y="327" class="box-title">2 governance hooks</text>
+  <text x="626" y="351" class="box-mono">PostToolUse</text>
+  <text x="626" y="371" class="box-body">Result contract and evidence fields</text>
+  <text x="626" y="391" class="box-body">Block malformed payloads; flag gaps</text>
+  <text x="626" y="417" class="box-mono">Stop</text>
+  <text x="626" y="437" class="box-body">G1: analysis exists, no report yet</text>
+  <text x="626" y="457" class="box-body">G2: report exported, no acceptance</text>
+  <text x="626" y="479" class="box-body">One reminder per session and gate</text>
+
+  <rect x="890" y="303" width="265" height="184" rx="10" fill="#ffffff" stroke="#5eead4"/>
+  <text x="906" y="327" class="box-title">Knowledge base</text>
+  <text x="906" y="351" class="box-body">Role identification decision tree</text>
+  <text x="906" y="371" class="box-body">Threshold rationale and scope</text>
+  <text x="906" y="391" class="box-body">Anti-error checklist</text>
+  <text x="906" y="411" class="box-body">Report wording and legal basis</text>
+  <text x="906" y="435" class="box-body">Loaded by stage, not all at once.</text>
+
+  <line x1="600" y1="505" x2="600" y2="527" stroke="#475569" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="612" y="523" class="arrow-label">calls deterministic tools</text>
+
+  <!-- Layer 3 -->
+  <rect x="30" y="530" width="1140" height="150" rx="14" fill="#fff7ed" stroke="#fed7aa"/>
+  <text x="50" y="556" class="band-label" fill="#b45309">COMPUTE LAYER · deterministic calculation, isolated from model text</text>
+
+  <rect x="50" y="568" width="265" height="96" rx="10" fill="#ffffff" stroke="#fdba74"/>
+  <text x="66" y="592" class="box-title">MCP server</text>
+  <text x="66" y="614" class="box-body">stdio JSON-RPC · FastMCP</text>
+  <text x="66" y="634" class="box-body">stdout kept clean; logs to stderr</text>
+  <text x="66" y="654" class="box-body">Server name: fundflow-toolkit</text>
+
+  <rect x="330" y="568" width="265" height="96" rx="10" fill="#ffffff" stroke="#fdba74"/>
+  <text x="346" y="592" class="box-title">Legacy analysis engine</text>
+  <text x="346" y="614" class="box-body">gambling_analysis.py</text>
+  <text x="346" y="634" class="box-body">6,340 lines, reused as-is</text>
+  <text x="346" y="654" class="box-body">Algorithms are not re-estimated by the model</text>
+
+  <rect x="610" y="568" width="265" height="96" rx="10" fill="#ffffff" stroke="#fdba74"/>
+  <text x="626" y="592" class="box-title">Numeric stack</text>
+  <text x="626" y="614" class="box-body">pandas · numpy · scikit-learn</text>
+  <text x="626" y="634" class="box-body">networkx · plotly · openpyxl</text>
+  <text x="626" y="654" class="box-body">Pinned in requirements.txt</text>
+
+  <rect x="890" y="568" width="265" height="96" rx="10" fill="#ffffff" stroke="#fdba74"/>
+  <text x="906" y="592" class="box-title">Dataset context</text>
+  <text x="906" y="614" class="box-body">Process-local dataset_id cache</text>
+  <text x="906" y="634" class="box-body">Dependency invalidation on recompute</text>
+  <text x="906" y="654" class="box-body">Restart = re-scan required</text>
+
+  <line x1="600" y1="680" x2="600" y2="702" stroke="#475569" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="612" y="698" class="arrow-label">writes summaries and full results</text>
+
+  <!-- Layer 4 -->
+  <rect x="30" y="705" width="1140" height="145" rx="14" fill="#f5f3ff" stroke="#ddd6fe"/>
+  <text x="50" y="731" class="band-label" fill="#6d28d9">DATA &amp; ARTIFACTS · synthetic only; local export</text>
+
+  <rect x="50" y="743" width="265" height="88" rx="10" fill="#ffffff" stroke="#c4b5fd"/>
+  <text x="66" y="767" class="box-title">Synthetic range</text>
+  <text x="66" y="789" class="box-body">8 frozen scenarios (dev + holdout)</text>
+  <text x="66" y="809" class="box-body">generator + truth + evaluator</text>
+
+  <rect x="330" y="743" width="265" height="88" rx="10" fill="#ffffff" stroke="#c4b5fd"/>
+  <text x="346" y="767" class="box-title">Deliverables</text>
+  <text x="346" y="789" class="box-body">agent/deliverables/&lt;dataset_id&gt;/</text>
+  <text x="346" y="809" class="box-body">01 intake … 07 verify</text>
+
+  <rect x="610" y="743" width="265" height="88" rx="10" fill="#ffffff" stroke="#c4b5fd"/>
+  <text x="626" y="767" class="box-title">Independent verification</text>
+  <text x="626" y="789" class="box-body">agent/verify/report_check.py</text>
+  <text x="626" y="809" class="box-body">structure · evidence · numbers · wording</text>
+
+  <rect x="890" y="743" width="265" height="88" rx="10" fill="#ffffff" stroke="#c4b5fd"/>
+  <text x="906" y="767" class="box-title">Local boundary</text>
+  <text x="906" y="789" class="box-body">No real statements, identities,</text>
+  <text x="906" y="809" class="box-body">keys, sessions or case data</text>
+
+  <text x="40" y="870" class="footer">Upstream: github.com/AgnesAI-Labs/agnes-harness @ cde816b · Apache-2.0 · vendor/ retained unmodified · Application code: Apache-2.0</text>
+</svg>

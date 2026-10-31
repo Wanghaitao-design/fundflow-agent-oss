@@ -1,0 +1,156 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="880" viewBox="0 0 1200 880" role="img" aria-labelledby="title desc">
+  <title id="title">涉赌资金流分析智能体架构</title>
+  <desc id="desc">四层架构：AGH 运行时、领域扩展层、计算层、数据与产物层。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#475569"/>
+    </marker>
+    <style>
+      .title { font: 700 26px "Microsoft YaHei", "PingFang SC", "Segoe UI", sans-serif; fill: #0f172a; }
+      .subtitle { font: 400 14px "Microsoft YaHei", "PingFang SC", "Segoe UI", sans-serif; fill: #475569; }
+      .band-label { font: 700 13px "Microsoft YaHei", "PingFang SC", "Segoe UI", sans-serif; letter-spacing: .03em; }
+      .box-title { font: 700 15px "Microsoft YaHei", "PingFang SC", "Segoe UI", sans-serif; fill: #0f172a; }
+      .box-body { font: 400 12.5px "Microsoft YaHei", "PingFang SC", "Segoe UI", sans-serif; fill: #334155; }
+      .box-mono { font: 400 12px Consolas, "Courier New", monospace; fill: #1e3a8a; }
+      .footer { font: 400 12px "Microsoft YaHei", "PingFang SC", "Segoe UI", sans-serif; fill: #64748b; }
+      .arrow-label { font: 600 11px "Microsoft YaHei", "PingFang SC", "Segoe UI", sans-serif; fill: #64748b; }
+    </style>
+  </defs>
+
+  <rect width="1200" height="880" fill="#ffffff"/>
+  <text x="40" y="42" class="title">涉赌资金流分析智能体 — 架构</text>
+  <text x="40" y="66" class="subtitle">在 Agnes Harness（AGH）之上装配七阶段工序、确定性工具与治理钩子</text>
+
+  <!-- 第一层 -->
+  <rect x="30" y="90" width="1140" height="150" rx="14" fill="#f8fafc" stroke="#cbd5e1"/>
+  <text x="50" y="116" class="band-label" fill="#1d4ed8">AGH 运行时 · Agnes Harness，Apache-2.0，上游版本固定</text>
+
+  <rect x="50" y="128" width="265" height="96" rx="10" fill="#ffffff" stroke="#93c5fd"/>
+  <text x="66" y="152" class="box-title">执行循环</text>
+  <text x="66" y="174" class="box-body">回合、步骤、收工闸门</text>
+  <text x="66" y="194" class="box-body">模型与工具编排</text>
+  <text x="66" y="214" class="box-body">会话恢复</text>
+
+  <rect x="330" y="128" width="265" height="96" rx="10" fill="#ffffff" stroke="#93c5fd"/>
+  <text x="346" y="152" class="box-title">事件账本</text>
+  <text x="346" y="174" class="box-body">只追加事实</text>
+  <text x="346" y="194" class="box-body">完整性校验链</text>
+  <text x="346" y="214" class="box-body">可回放、可追责</text>
+
+  <rect x="610" y="128" width="265" height="96" rx="10" fill="#ffffff" stroke="#93c5fd"/>
+  <text x="626" y="152" class="box-title">审批与沙箱</text>
+  <text x="626" y="174" class="box-body">副作用前先由人确认</text>
+  <text x="626" y="194" class="box-body">命令与文件边界</text>
+  <text x="626" y="214" class="box-body">拒绝动作也留在记录里</text>
+
+  <rect x="890" y="128" width="265" height="96" rx="10" fill="#ffffff" stroke="#93c5fd"/>
+  <text x="906" y="152" class="box-title">能力接口</text>
+  <text x="906" y="174" class="box-body">MCP · 技能 · 钩子 · Provider</text>
+  <text x="906" y="194" class="box-body">十个可替换接口</text>
+  <text x="906" y="214" class="box-body">协议闭集由模式生成</text>
+
+  <line x1="600" y1="240" x2="600" y2="262" stroke="#475569" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="612" y="258" class="arrow-label">注册并治理</text>
+
+  <!-- 第二层 -->
+  <rect x="30" y="265" width="1140" height="240" rx="14" fill="#f0fdfa" stroke="#99f6e4"/>
+  <text x="50" y="291" class="band-label" fill="#0f766e">领域扩展层 · 全部经 AGH 接口装配，不改上游源码</text>
+
+  <rect x="50" y="303" width="265" height="184" rx="10" fill="#ffffff" stroke="#5eead4"/>
+  <text x="66" y="327" class="box-title">3 个技能包</text>
+  <text x="66" y="351" class="box-mono">fundflow-investigation</text>
+  <text x="66" y="371" class="box-body">七阶段工序、证据规则、</text>
+  <text x="66" y="389" class="box-body">按阶段加载知识切片</text>
+  <text x="66" y="415" class="box-mono">fundflow-range</text>
+  <text x="66" y="435" class="box-body">合成场景与规则评测</text>
+  <text x="66" y="461" class="box-mono">fundflow-verify</text>
+  <text x="66" y="481" class="box-body">五项交付验收</text>
+
+  <rect x="330" y="303" width="265" height="184" rx="10" fill="#ffffff" stroke="#5eead4"/>
+  <text x="346" y="327" class="box-title">11 个 MCP 工具</text>
+  <text x="346" y="351" class="box-body">scan_dataset · build_fund_graph</text>
+  <text x="346" y="371" class="box-body">classify_tiers · detect_laundering</text>
+  <text x="346" y="391" class="box-body">scan_structure · rank_suspects</text>
+  <text x="346" y="411" class="box-body">trace_funds · profile_account</text>
+  <text x="346" y="431" class="box-body">export_evidence · simulate_case</text>
+  <text x="346" y="451" class="box-body">anonymize_dataset</text>
+  <text x="346" y="475" class="box-body">全部计算留在 Python 侧。</text>
+
+  <rect x="610" y="303" width="265" height="184" rx="10" fill="#ffffff" stroke="#5eead4"/>
+  <text x="626" y="327" class="box-title">2 个治理钩子</text>
+  <text x="626" y="351" class="box-mono">PostToolUse</text>
+  <text x="626" y="371" class="box-body">检查结果契约与证据字段</text>
+  <text x="626" y="391" class="box-body">非法载荷阻断，字段缺口提醒</text>
+  <text x="626" y="417" class="box-mono">Stop</text>
+  <text x="626" y="437" class="box-body">G1：已有研判材料，未见报告</text>
+  <text x="626" y="457" class="box-body">G2：已导出报告，未见验收</text>
+  <text x="626" y="479" class="box-body">同一会话每道门只提醒一次</text>
+
+  <rect x="890" y="303" width="265" height="184" rx="10" fill="#ffffff" stroke="#5eead4"/>
+  <text x="906" y="327" class="box-title">领域知识库</text>
+  <text x="906" y="351" class="box-body">角色识别决策树</text>
+  <text x="906" y="371" class="box-body">阈值口径与理由</text>
+  <text x="906" y="391" class="box-body">防错清单</text>
+  <text x="906" y="411" class="box-body">报告表述与法源</text>
+  <text x="906" y="435" class="box-body">按阶段加载，不一次通读。</text>
+
+  <line x1="600" y1="505" x2="600" y2="527" stroke="#475569" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="612" y="523" class="arrow-label">调用确定性工具</text>
+
+  <!-- 第三层 -->
+  <rect x="30" y="530" width="1140" height="150" rx="14" fill="#fff7ed" stroke="#fed7aa"/>
+  <text x="50" y="556" class="band-label" fill="#b45309">计算层 · 确定性计算，与模型文字分离</text>
+
+  <rect x="50" y="568" width="265" height="96" rx="10" fill="#ffffff" stroke="#fdba74"/>
+  <text x="66" y="592" class="box-title">MCP 服务</text>
+  <text x="66" y="614" class="box-body">stdio JSON-RPC · FastMCP</text>
+  <text x="66" y="634" class="box-body">stdout 保持干净，日志走 stderr</text>
+  <text x="66" y="654" class="box-body">服务名：fundflow-toolkit</text>
+
+  <rect x="330" y="568" width="265" height="96" rx="10" fill="#ffffff" stroke="#fdba74"/>
+  <text x="346" y="592" class="box-title">既有分析引擎</text>
+  <text x="346" y="614" class="box-body">gambling_analysis.py</text>
+  <text x="346" y="634" class="box-body">6,340 行，原样复用</text>
+  <text x="346" y="654" class="box-body">金额、评分、路径不由模型估算</text>
+
+  <rect x="610" y="568" width="265" height="96" rx="10" fill="#ffffff" stroke="#fdba74"/>
+  <text x="626" y="592" class="box-title">数值栈</text>
+  <text x="626" y="614" class="box-body">pandas · numpy · scikit-learn</text>
+  <text x="626" y="634" class="box-body">networkx · plotly · openpyxl</text>
+  <text x="626" y="654" class="box-body">版本锁在 requirements.txt</text>
+
+  <rect x="890" y="568" width="265" height="96" rx="10" fill="#ffffff" stroke="#fdba74"/>
+  <text x="906" y="592" class="box-title">数据集上下文</text>
+  <text x="906" y="614" class="box-body">进程内 dataset_id 缓存</text>
+  <text x="906" y="634" class="box-body">重算时依赖失效传播</text>
+  <text x="906" y="654" class="box-body">服务重启后须重新扫描</text>
+
+  <line x1="600" y1="680" x2="600" y2="702" stroke="#475569" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="612" y="698" class="arrow-label">写入摘要与完整结果</text>
+
+  <!-- 第四层 -->
+  <rect x="30" y="705" width="1140" height="145" rx="14" fill="#f5f3ff" stroke="#ddd6fe"/>
+  <text x="50" y="731" class="band-label" fill="#6d28d9">数据与产物 · 仅合成数据，本机导出</text>
+
+  <rect x="50" y="743" width="265" height="88" rx="10" fill="#ffffff" stroke="#c4b5fd"/>
+  <text x="66" y="767" class="box-title">合成靶场</text>
+  <text x="66" y="789" class="box-body">8 个冻结场景（dev + holdout）</text>
+  <text x="66" y="809" class="box-body">生成器 + 真值 + 评测</text>
+
+  <rect x="330" y="743" width="265" height="88" rx="10" fill="#ffffff" stroke="#c4b5fd"/>
+  <text x="346" y="767" class="box-title">交付物</text>
+  <text x="346" y="789" class="box-body">agent/deliverables/&lt;dataset_id&gt;/</text>
+  <text x="346" y="809" class="box-body">01 受理 … 07 验收</text>
+
+  <rect x="610" y="743" width="265" height="88" rx="10" fill="#ffffff" stroke="#c4b5fd"/>
+  <text x="626" y="767" class="box-title">独立验收</text>
+  <text x="626" y="789" class="box-body">agent/verify/report_check.py</text>
+  <text x="626" y="809" class="box-body">结构 · 证据 · 数值 · 表述</text>
+
+  <rect x="890" y="743" width="265" height="88" rx="10" fill="#ffffff" stroke="#c4b5fd"/>
+  <text x="906" y="767" class="box-title">本机边界</text>
+  <text x="906" y="789" class="box-body">不含真实流水、身份、</text>
+  <text x="906" y="809" class="box-body">密钥、会话或案件数据</text>
+
+  <text x="40" y="870" class="footer">上游：github.com/AgnesAI-Labs/agnes-harness @ cde816b · Apache-2.0 · vendor/ 原样保留 · 应用代码：Apache-2.0</text>
+</svg>

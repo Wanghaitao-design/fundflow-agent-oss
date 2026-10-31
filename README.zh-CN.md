@@ -340,7 +340,7 @@ py -3.12 run.py start                 # 启动工作台，默认端口 4177
 1. 克隆仓库并安装：
 
    ```powershell
-   git clone https://github.com/3911389505/fundflow-agent-oss.git
+   git clone https://github.com/Wanghaitao-design/fundflow-agent-oss.git
    cd fundflow-agent-oss
    py -3.12 run.py setup
    py -3.12 run.py verify
@@ -390,7 +390,7 @@ py -3.12 run.py start                 # 启动工作台，默认端口 4177
 ### 5.2 启动
 
 ```powershell
-git clone https://github.com/3911389505/fundflow-agent-oss.git
+git clone https://github.com/Wanghaitao-design/fundflow-agent-oss.git
 cd fundflow-agent-oss
 py -3.12 run.py setup
 py -3.12 run.py verify

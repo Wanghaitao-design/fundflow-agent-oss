@@ -340,7 +340,7 @@ py -3.12 run.py start                 # Start the workbench; default port 4177
 1. Clone and install:
 
    ```powershell
-   git clone https://github.com/3911389505/fundflow-agent-oss.git
+   git clone https://github.com/Wanghaitao-design/fundflow-agent-oss.git
    cd fundflow-agent-oss
    py -3.12 run.py setup
    py -3.12 run.py verify
@@ -390,7 +390,7 @@ Install pnpm with `npm install -g pnpm@10.34.5`. Installing dependencies require
 ### 5.2 Start
 
 ```powershell
-git clone https://github.com/3911389505/fundflow-agent-oss.git
+git clone https://github.com/Wanghaitao-design/fundflow-agent-oss.git
 cd fundflow-agent-oss
 py -3.12 run.py setup
 py -3.12 run.py verify

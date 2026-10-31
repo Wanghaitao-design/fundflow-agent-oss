@@ -18,7 +18,7 @@ A gambling-related fund-flow investigation agent that turns multi-source stateme
 <summary><b>Full contents</b></summary>
 
 - [1. Project Overview](#overview)
-  - 1.1 Background · 1.2 What it is · 1.3 Core features · 1.4 What is new · 1.5 What it does not do · 1.6 Who it is for
+  - 1.1 Background · 1.2 What it is · 1.3 Core features · 1.4 What is new · 1.5 What it does not do · 1.6 Who it is for · 1.7 Relationship to Agnes Harness
 - [2. Demo Video](#video)
 - [3. Architecture](#architecture)
   - 3.1 Four layers · 3.2 Core modules · 3.3 Seven-stage data flow · 3.4 Implementation notes
@@ -104,6 +104,24 @@ Everything is assembled through AGH interfaces and registries. **No upstream sou
 | Reviewer or team lead | A uniform result contract, explicit evidence fields, automated acceptance, and stage gates |
 | Deployer or engineer | MCP over stdio, a pinned AGH revision, a SHA256 manifest, CI, and a synthetic range |
 | Competition judge | Bilingual documentation, a reproducible demo, measured validation, and explicit boundaries |
+
+### 1.7 Relationship to Agnes Harness
+
+This repository is **not a fork of AGH and not a competing harness**. AGH is the general-purpose runtime; Fundflow Agent is one domain application assembled on top of it. The upstream snapshot under `vendor/agnes-harness/` is unmodified.
+
+| Aspect | Agnes Harness (upstream) | Fundflow Agent (this repository) |
+|---|---|---|
+| Scope | General-purpose agent runtime for any task | Gambling-related fund-flow investigation only |
+| Execution loop, event ledger, approvals, sandbox | Provided | Used unchanged |
+| Model providers, Web/CLI/TUI/SDK, plugins, MCP and skills | Provided | Used unchanged |
+| Investigation workflow and stage gates | Not included | 7 stages, 3 skill packages, 2 governance hooks |
+| Mechanical computation | Not included | 11 MCP tools behind a stdio server |
+| Result contract and evidence fields | Not included | Uniform conclusion / evidence / anomalies / artifacts object |
+| Synthetic scenarios and acceptance | Not included | 8 frozen scenarios, generator, evaluator, report check |
+| Platform validation | macOS and Linux maintained; Windows not validated end to end upstream | Windows x64 synthetic validation (2026-10-13); CI on Windows and Ubuntu |
+| Public benchmark | ALE: 21.7% pass, 42.7 score | None; synthetic validation only |
+
+**Repository composition:** of the 3,804 tracked files, 3,725 are the vendored AGH snapshot and 79 are this project's own files (the domain layer). If you need the runtime, use AGH. If you need a worked example of extending it for fund-flow investigation, use this repository.
 
 ---
 

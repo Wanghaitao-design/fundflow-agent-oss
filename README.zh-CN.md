@@ -2,16 +2,36 @@
 
 [English](README.md) | 简体中文
 
-![License](https://img.shields.io/badge/license-Apache--2.0-blue)
-![Python](https://img.shields.io/badge/python-3.12-3776AB)
-![MCP](https://img.shields.io/badge/MCP-11%20tools-0f766e)
-![AGH](https://img.shields.io/badge/AGH-cde816b-1d4ed8)
+[![License](https://img.shields.io/badge/license-Apache--2.0-blue)](LICENSE)
+[![Python](https://img.shields.io/badge/python-3.12-3776AB)](requirements.txt)
+[![MCP](https://img.shields.io/badge/MCP-11%20tools-0f766e)](#integration)
+[![AGH](https://img.shields.io/badge/AGH-cde816b-1d4ed8)](https://github.com/AgnesAI-Labs/agnes-harness/tree/cde816b88c737b9fd04e7ef55b899e7b4cd55eb7)
+[![CI](https://github.com/Wanghaitao-design/fundflow-agent-oss/actions/workflows/python.yml/badge.svg)](https://github.com/Wanghaitao-design/fundflow-agent-oss/actions/workflows/python.yml)
 
 把多来源账单整理、资金网络建模、重点账户筛查、报告交付与独立验收，组织成一条**可执行、可回溯、可验收**的智能体工序。项目运行在 [Agnes Harness（AGH）](https://github.com/AgnesAI-Labs/agnes-harness) 之上，模型负责理解与编排，本地 MCP 工具负责确定性计算。
 
 > 本仓库只含程序与合成场景，不含真实流水、身份表、密钥、会话或案件产物。所有输出均为供侦查核实的线索材料，不构成司法结论。
 
-**导航：** [项目介绍](#overview) · [视频介绍](#video) · [架构介绍](#architecture) · [集成标准](#integration) · [快速开始](#quickstart) · [验证与证据](#verification) · [局限与边界](#boundaries) · [许可](#license)
+**导航：** [项目介绍](#overview) · [视频介绍](#video) · [架构介绍](#architecture) · [集成标准](#integration) · [快速开始](#quickstart) · [验证与证据](#verification) · [局限与边界](#boundaries) · [FAQ](#faq) · [贡献与许可](#license)
+
+<details>
+<summary><b>完整目录</b></summary>
+
+- [一、项目介绍](#overview)
+  - 1.1 背景 · 1.2 它是什么 · 1.3 核心功能 · 1.4 创新点 · 1.5 它不做什么 · 1.6 谁适合用
+- [二、视频介绍](#video)
+- [三、架构介绍](#architecture)
+  - 3.1 四层结构 · 3.2 核心模块 · 3.3 七阶段数据流 · 3.4 实现要点
+- [四、集成标准](#integration)
+  - 4.1 传输 · 4.2 工具目录 · 4.3 返回契约 · 4.4 审批 · 4.5 钩子 · 4.6 技能包 · 4.7 配置 · 4.8 版本 · 4.9 边界 · 4.10 接入另一个 AGH
+- [五、快速开始](#quickstart)
+  - 5.1 环境 · 5.2 启动 · 5.3 首次装配 · 5.4 合成演示 · 5.5 GUI · 5.6 仓库结构
+- [六、验证与证据](#verification)
+- [七、局限与数据边界](#boundaries)
+- [八、FAQ 与排错](#faq)
+- [九、贡献、安全与许可](#license)
+
+</details>
 
 ---
 
@@ -76,12 +96,23 @@
 - **不宣称准确率**：合成评测只说明规则在合成场景中的表现，不外推到真实案件。
 - **不保证全自动**：身份核实、阈值变更、对外导出等关键判断保留人工确认。
 
+### 1.6 谁适合用
+
+| 角色 | 它能给你什么 |
+|---|---|
+| 侦查人员 | 七阶段工序、重点账户排序、可回溯证据、单账户一页纸画像 |
+| 复核/带队人员 | 统一返回契约、显式证据字段、自动验收、交付阶段门 |
+| 部署/工程人员 | stdio MCP、固定 AGH 版本、SHA256 清单、CI、合成靶场 |
+| 比赛评委 | 中英双语文档、可复现演示、实测验证、明确边界 |
+
 ---
 
 <a id="video"></a>
 ## 二、视频介绍（Demo Video）
 
 **演示视频（B 站，3 分 24 秒）：** <https://www.bilibili.com/video/BV1gDpr6fEY2/>
+
+[![在 B 站观看演示](docs/assets/screenshots/01-workbench-sessions.png)](https://www.bilibili.com/video/BV1gDpr6fEY2/)
 
 视频按以下顺序演示：
 
@@ -95,15 +126,11 @@
 8. `fundflow-verify` 验收；
 9. 真实数据隔离说明。
 
-> 视频原片 122.4 MiB，超过 GitHub 单文件 100 MiB 限制，因此不放入仓库；B 站链接是正式入口。下方截图均来自合成数据演示。
+> 视频原片 122.4 MiB，超过 GitHub 单文件 100 MiB 限制，因此不放入仓库；B 站链接是正式入口。本节截图均来自合成数据演示。
 
-| 工作台会话与验收摘要 | 轨迹中的工具调用与审批 |
+| 轨迹中的工具调用与审批 | 合成数据研判报告 |
 |---|---|
-| ![工作台会话列表](docs/assets/screenshots/01-workbench-sessions.png) | ![轨迹与审批](docs/assets/screenshots/02-trace-tools-approvals.png) |
-
-| 合成数据研判报告 |
-|---|
-| ![报告成品页](docs/assets/screenshots/03-report.png) |
+| ![轨迹与审批](docs/assets/screenshots/02-trace-tools-approvals.png) | ![报告成品页](docs/assets/screenshots/03-report.png) |
 
 ---
 
@@ -447,6 +474,32 @@ py -3.12 run.py gui
 
 工具不会猜测真实流水目录。
 
+### 5.6 仓库结构
+
+```text
+fundflow-agent-oss/
+├── README.md / README.zh-CN.md     # 英文默认 / 中文
+├── CONTRIBUTING.md / SECURITY.md   # 贡献与安全策略
+├── LICENSE / NOTICE                # Apache-2.0 与上游声明
+├── UPSTREAM.json                   # AGH 来源、提交、许可证
+├── SOURCE_MANIFEST.json            # 交付文件 SHA256
+├── VALIDATION.md                   # 干净环境验证记录
+├── run.py                          # setup / verify / start / register-mcp
+├── requirements*.txt
+├── agent/
+│   ├── mcp_server/                 # 11 个工具、stdio 入口、返回契约
+│   ├── skills/                     # 3 个技能包
+│   ├── hooks/                      # 2 个治理钩子
+│   ├── range/                      # 生成器、评测器、8 个场景
+│   └── verify/                     # 报告验收
+├── docs/assets/                    # 架构图与截图
+├── vendor/agnes-harness/           # 原样保留的上游 AGH，Apache-2.0
+├── gambling_analysis.py            # 既有引擎，原样复用
+├── query_person.py                 # 可选单人查询
+├── mmfrisk_gui.py                  # 可选 GUI
+└── start-workbench.cmd
+```
+
 ---
 
 <a id="verification"></a>
@@ -468,7 +521,7 @@ py -3.12 run.py gui
 | 报告验收负例自检 | PASS，覆盖数值、证据、表述及空文件 |
 | 单人查询 `--help` | PASS，支持显式 `--data-dir` |
 
-**范围说明：** 上述验证没有发起真实模型推理；Provider 配置、Skills 审阅启用和 hooks 在模型会话中的完整装配需在使用者本机完成。GUI 未做交互验收；macOS/Linux 工作台未实测；CI 已配置 Windows/Linux 的合成 Python 检查，首次运行结果以 GitHub Actions 页面为准。
+**范围说明：** 上述验证没有发起真实模型推理；Provider 配置、Skills 审阅启用和 hooks 在模型会话中的完整装配需在使用者本机完成。GUI 未做交互验收；macOS/Linux 工作台未实测；CI 已在 Windows 和 Linux 上运行合成 Python 检查，首次运行（41164904996）两边均通过。
 
 比赛提交材料另含事件账本导出：代表会话 `cd718c95…` 记录 33 个步骤、37 次工具调用、12 次审批；工具错误和被拒绝的审批如实保留。仓库本身不附带会话数据库或运行产物。
 
@@ -486,8 +539,91 @@ py -3.12 run.py gui
 
 ---
 
+<a id="faq"></a>
+## 八、FAQ 与排错（FAQ & Troubleshooting）
+
+### 8.1 常见问题
+
+**需要模型 API Key 吗？**
+
+智能体推理需要；本地 MCP 工具和合成靶场不需要。在 Web 的 **Settings → Provider** 页面配置，不要把密钥写进源码、聊天或 Git。
+
+**是完全离线吗？**
+
+不是。解析和规则计算在本地完成，但智能体推理会调用使用者配置的模型 API，可能产生费用。
+
+**能处理真实案件数据吗？**
+
+只有使用者显式指定路径并授权时才可以。仓库只带合成数据；真实流水、身份表和案件产物不得提交、附在 Issue 里或放进 Pull Request。
+
+**为什么演示视频不放进仓库？**
+
+原片 122.4 MiB，超过 GitHub 单文件 100 MiB 限制。B 站链接是正式入口；截图均来自合成数据。
+
+**“验证通过”验证了什么？**
+
+`VALIDATION.md` 记录的是在干净环境里、只用脚本生成的合成数据跑通的验证。它不代表真实案件准确率、法律效力或司法结论。
+
+**能直接上生产吗？**
+
+这是比赛和研究原型。身份核实、阈值变更、对外导出仍由人决定；不宣称准确率或节省比例。
+
+**该用哪个模型？**
+
+任何 AGH 模型配置支持的供应商都可以。工具选择和解释质量会随模型变化；演示使用的是比赛环境配置的模型。
+
+**为什么拆成 11 个工具而不是 1 个？**
+
+每个阶段一个确定性工具，返回统一契约。计算可复现、失败显式暴露，钩子也能在边界上检查结果。
+
+### 8.2 排错
+
+| 现象 | 处理 |
+|---|---|
+| 4177 端口被占用 | `py -3.12 run.py start --port 4181` |
+| Windows 拦截命令钩子 | 启动前运行 `py -3.12 run.py trust-hooks` |
+| 看不到 `fundflow` MCP 服务 | 先 `py -3.12 run.py register-mcp`，再到 **Settings → MCP** 审阅并启用；新服务默认禁用 |
+| 重启后 `dataset_id` 失效 | ID 只在当前进程有效，重新运行 `scan_dataset` |
+| Windows 完整工作台构建失败 | 安装 Visual Studio C++ Build Tools 与 Windows SDK，或改用 `run.py setup --python-only` |
+| JSON-RPC 报错或工具输出乱码 | 工具日志必须走 `stderr`；`stdout` 只放协议消息 |
+| GUI 启动不了 | 用 `run.py setup --python-only --gui` 安装 GUI 依赖，再 `run.py gui` |
+
+### 8.3 状态与路线图
+
+| 范围 | 状态 |
+|---|---|
+| Windows x64 工作台、MCP、钩子 | 2026-10-13 用合成数据验证通过（见 `VALIDATION.md`） |
+| CI：Windows + Ubuntu，Python/MCP 合成检查 | 已通过（run 41164904996） |
+| macOS / Linux 工作台 | 未做端到端实测 |
+| 真实模型推理会话 | 发布验证未跑；需使用者配置 Provider |
+| GUI | 未做交互验收 |
+| 真实案件准确率 | 未评估，不作宣称 |
+
+**下一步：** 补 macOS/Linux 工作台检查，在合成数据上跑一次完整真实模型会话，并扩充合成场景。
+
+---
+
 <a id="license"></a>
-## 八、许可与第三方声明（License & Third-party Notices）
+## 九、贡献、安全与许可（Contributing, Security & License）
+
+### 9.1 贡献
+
+欢迎提 Issue 和 Pull Request。提交前请：
+
+1. 运行 `py -3.12 run.py setup --python-only` 和 `py -3.12 run.py verify`；
+2. 保持改动聚焦，不要修改 `vendor/agnes-harness/`；
+3. 只用合成数据；真实流水、身份表、密钥和案件产物一律不得出现；
+4. 文档变更同时更新 `README.md` 和 `README.zh-CN.md`。
+
+详见 [CONTRIBUTING.md](CONTRIBUTING.md)。
+
+### 9.2 安全
+
+发现漏洞不要开公开 Issue。请在本仓库 **Security** 页发起私密漏洞报告，写明受影响路径、用合成数据的复现步骤、影响和建议修复。不要附带真实案件数据或凭据。
+
+详见 [SECURITY.md](SECURITY.md)。
+
+### 9.3 许可与第三方声明
 
 - **应用代码**：Apache License 2.0，见 [LICENSE](LICENSE)。
 - **上游底座**：Agnes Harness，Apache License 2.0，固定提交 `cde816b88c737b9fd04e7ef55b899e7b4cd55eb7`，源码原样保留在 `vendor/agnes-harness/`，其 `LICENSE`、`NOTICE` 和第三方声明一并保留。

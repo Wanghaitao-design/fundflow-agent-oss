@@ -2,16 +2,36 @@
 
 English | [简体中文](README.zh-CN.md)
 
-![License](https://img.shields.io/badge/license-Apache--2.0-blue)
-![Python](https://img.shields.io/badge/python-3.12-3776AB)
-![MCP](https://img.shields.io/badge/MCP-11%20tools-0f766e)
-![AGH](https://img.shields.io/badge/AGH-cde816b-1d4ed8)
+[![License](https://img.shields.io/badge/license-Apache--2.0-blue)](LICENSE)
+[![Python](https://img.shields.io/badge/python-3.12-3776AB)](requirements.txt)
+[![MCP](https://img.shields.io/badge/MCP-11%20tools-0f766e)](#integration)
+[![AGH](https://img.shields.io/badge/AGH-cde816b-1d4ed8)](https://github.com/AgnesAI-Labs/agnes-harness/tree/cde816b88c737b9fd04e7ef55b899e7b4cd55eb7)
+[![CI](https://github.com/Wanghaitao-design/fundflow-agent-oss/actions/workflows/python.yml/badge.svg)](https://github.com/Wanghaitao-design/fundflow-agent-oss/actions/workflows/python.yml)
 
 A gambling-related fund-flow investigation agent that turns multi-source statement intake, fund-network modeling, suspect ranking, report delivery, and independent acceptance into one **executable, traceable, and verifiable** workflow. It runs on [Agnes Harness (AGH)](https://github.com/AgnesAI-Labs/agnes-harness): the model understands and orchestrates, while local MCP tools perform deterministic computation.
 
 > This repository contains programs and synthetic scenarios only. It ships no real transaction records, identity tables, credentials, sessions, or case artifacts. All output is lead material for investigators to verify; it is not a judicial conclusion.
 
-**Contents:** [Overview](#overview) · [Demo Video](#video) · [Architecture](#architecture) · [Integration Standards](#integration) · [Quick Start](#quickstart) · [Verification](#verification) · [Limitations](#boundaries) · [License](#license)
+**Contents:** [Overview](#overview) · [Demo Video](#video) · [Architecture](#architecture) · [Integration Standards](#integration) · [Quick Start](#quickstart) · [Verification](#verification) · [Limitations](#boundaries) · [FAQ](#faq) · [Contributing & License](#license)
+
+<details>
+<summary><b>Full contents</b></summary>
+
+- [1. Project Overview](#overview)
+  - 1.1 Background · 1.2 What it is · 1.3 Core features · 1.4 What is new · 1.5 What it does not do · 1.6 Who it is for
+- [2. Demo Video](#video)
+- [3. Architecture](#architecture)
+  - 3.1 Four layers · 3.2 Core modules · 3.3 Seven-stage data flow · 3.4 Implementation notes
+- [4. Integration Standards](#integration)
+  - 4.1 Transport · 4.2 Tool catalog · 4.3 Result contract · 4.4 Approvals · 4.5 Hooks · 4.6 Skills · 4.7 Configuration · 4.8 Versioning · 4.9 Boundaries · 4.10 Another AGH instance
+- [5. Quick Start](#quickstart)
+  - 5.1 Environment · 5.2 Start · 5.3 First assembly · 5.4 Synthetic demo · 5.5 GUI · 5.6 Repository layout
+- [6. Verification](#verification)
+- [7. Limitations and Data Boundary](#boundaries)
+- [8. FAQ and Troubleshooting](#faq)
+- [9. Contributing, Security, and License](#license)
+
+</details>
 
 ---
 
@@ -76,12 +96,23 @@ Everything is assembled through AGH interfaces and registries. **No upstream sou
 - **It does not claim accuracy.** Synthetic evaluation describes rule behavior in synthetic scenarios and does not generalize to real cases.
 - **It is not fully automatic.** Identity verification, threshold changes, and external export remain human decisions.
 
+### 1.6 Who it is for
+
+| Role | What the project gives them |
+|---|---|
+| Investigator | A seven-stage workflow, ranked leads, traceable evidence, and one-page account profiles |
+| Reviewer or team lead | A uniform result contract, explicit evidence fields, automated acceptance, and stage gates |
+| Deployer or engineer | MCP over stdio, a pinned AGH revision, a SHA256 manifest, CI, and a synthetic range |
+| Competition judge | Bilingual documentation, a reproducible demo, measured validation, and explicit boundaries |
+
 ---
 
 <a id="video"></a>
 ## 2. Demo Video
 
 **Demo video (Bilibili, 3 min 24 s):** <https://www.bilibili.com/video/BV1gDpr6fEY2/>
+
+[![Watch the demo on Bilibili](docs/assets/screenshots/01-workbench-sessions.png)](https://www.bilibili.com/video/BV1gDpr6fEY2/)
 
 The video walks through:
 
@@ -95,15 +126,11 @@ The video walks through:
 8. `fundflow-verify` acceptance;
 9. Isolation from real data.
 
-> The original video is 122.4 MiB, above GitHub's 100 MiB per-file limit, so it is not committed. The Bilibili link is the canonical entry point. All screenshots below come from synthetic-data demos.
+> The original video is 122.4 MiB, above GitHub's 100 MiB per-file limit, so it is not committed. The Bilibili link is the canonical entry point. All screenshots in this section come from synthetic-data demos.
 
-| Workbench sessions and acceptance summary | Tool calls and approvals in the trace |
+| Tool calls and approvals in the trace | Synthetic-data investigation report |
 |---|---|
-| ![Workbench session list](docs/assets/screenshots/01-workbench-sessions.png) | ![Trace with tools and approvals](docs/assets/screenshots/02-trace-tools-approvals.png) |
-
-| Synthetic-data investigation report |
-|---|
-| ![Report output](docs/assets/screenshots/03-report.png) |
+| ![Trace with tools and approvals](docs/assets/screenshots/02-trace-tools-approvals.png) | ![Report output](docs/assets/screenshots/03-report.png) |
 
 ---
 
@@ -447,6 +474,32 @@ The single-person query requires an explicit directory:
 
 The tool never guesses a real statement directory.
 
+### 5.6 Repository layout
+
+```text
+fundflow-agent-oss/
+├── README.md / README.zh-CN.md     # English default / Chinese
+├── CONTRIBUTING.md / SECURITY.md   # contribution and security policies
+├── LICENSE / NOTICE                # Apache-2.0 and upstream notice
+├── UPSTREAM.json                   # AGH source, commit, license
+├── SOURCE_MANIFEST.json            # SHA256 of delivered files
+├── VALIDATION.md                   # clean-environment verification record
+├── run.py                          # setup / verify / start / register-mcp
+├── requirements*.txt
+├── agent/
+│   ├── mcp_server/                 # 11 tools, stdio entry, result contract
+│   ├── skills/                     # 3 skill packages
+│   ├── hooks/                      # 2 governance hooks
+│   ├── range/                      # generator, evaluator, 8 scenarios
+│   └── verify/                     # report acceptance
+├── docs/assets/                    # architecture SVGs and screenshots
+├── vendor/agnes-harness/           # unmodified upstream AGH, Apache-2.0
+├── gambling_analysis.py            # existing engine, reused as-is
+├── query_person.py                 # optional single-person query
+├── mmfrisk_gui.py                  # optional GUI
+└── start-workbench.cmd
+```
+
 ---
 
 <a id="verification"></a>
@@ -468,7 +521,7 @@ The tool never guesses a real statement directory.
 | Report acceptance negative-case self-test | PASS: numbers, evidence, wording, and empty files covered |
 | Single-person query `--help` | PASS: supports explicit `--data-dir` |
 
-**Scope note:** the validation above did not start a real model inference. Provider configuration, skill review/enablement, and full hook behavior in a model session must be completed on the user's machine. The GUI was not interactively accepted; macOS/Linux workbenches were not tested; CI is configured for synthetic Python checks on Windows and Linux, and the first run's result should be read from the GitHub Actions page.
+**Scope note:** the validation above did not start a real model inference. Provider configuration, skill review/enablement, and full hook behavior in a model session must be completed on the user's machine. The GUI was not interactively accepted; macOS/Linux workbenches were not tested; CI runs synthetic Python checks on Windows and Linux, and the first run (41164904996) passed on both.
 
 The competition submission additionally includes an event-ledger export: the representative session `cd718c95…` records 33 steps, 37 tool calls, and 12 approvals, with tool errors and rejected approvals preserved. This repository does not ship session databases or runtime artifacts.
 
@@ -486,8 +539,91 @@ The competition submission additionally includes an event-ledger export: the rep
 
 ---
 
+<a id="faq"></a>
+## 8. FAQ and Troubleshooting
+
+### 8.1 FAQ
+
+**Do I need a model API key?**
+
+Yes for agent reasoning. Local MCP tools and the synthetic range do not need one. Configure the provider in the Web **Settings → Provider** page; never put credentials in source, chat, or Git.
+
+**Is the system fully offline?**
+
+No. Parsing and rule evaluation are local, but agent reasoning calls the model API configured by the user and may incur costs.
+
+**Can it process real case data?**
+
+Only with an explicit path and authorization from the user. The repository ships synthetic data only; real statements, identity tables, and case artifacts must never be committed, attached to issues, or included in a pull request.
+
+**Why is the demo video not in the repository?**
+
+The original file is 122.4 MiB, above GitHub's 100 MiB per-file limit. The Bilibili link is the canonical entry point; the screenshots use synthetic data.
+
+**What does "verified" mean?**
+
+`VALIDATION.md` records a clean-environment run on script-generated synthetic data. It does not establish real-case accuracy, legal validity, or judicial conclusions.
+
+**Is it production-ready?**
+
+It is a competition and research prototype. Identity verification, threshold changes, and external export remain human decisions. No accuracy or savings claim is made.
+
+**Which model should I use?**
+
+Any provider supported by the AGH model configuration. Tool selection and explanation quality vary by model; the demo used the competition environment's configured model.
+
+**Why 11 tools instead of one?**
+
+Each stage has a deterministic tool with a uniform contract. This keeps computation reproducible, makes failures explicit, and lets the hooks check results at the boundary.
+
+### 8.2 Troubleshooting
+
+| Symptom | Fix |
+|---|---|
+| Port 4177 is already in use | `py -3.12 run.py start --port 4181` |
+| Windows blocks command hooks | Run `py -3.12 run.py trust-hooks` before `run.py start` |
+| The `fundflow` MCP service is missing | Run `py -3.12 run.py register-mcp`, then review and enable it in **Settings → MCP**; new services are disabled by default |
+| `dataset_id` is invalid after a restart | The ID is process-local; run `scan_dataset` again |
+| Full workbench build fails on Windows | Install Visual Studio C++ Build Tools and the Windows SDK, or use `run.py setup --python-only` |
+| JSON-RPC errors or garbled tool output | Tool logs must go to `stderr`; `stdout` is reserved for protocol messages |
+| The GUI cannot start | Install the GUI extras with `run.py setup --python-only --gui`, then `run.py gui` |
+
+### 8.3 Status and roadmap
+
+| Area | State |
+|---|---|
+| Windows x64 workbench, MCP, hooks | Verified on 2026-10-13 with synthetic data (see `VALIDATION.md`) |
+| CI: Windows + Ubuntu, Python/MCP synthetic checks | Passing (run 41164904996) |
+| macOS / Linux workbench | Not tested end to end |
+| Real-model inference session | Not run in the release validation; requires user provider configuration |
+| GUI | Not interactively accepted |
+| Real-case accuracy | Not evaluated; no claim is made |
+
+**Next:** add a macOS/Linux workbench check, run a full real-model session on synthetic data, and expand the synthetic scenarios.
+
+---
+
 <a id="license"></a>
-## 8. License and Third-party Notices
+## 9. Contributing, Security, and License
+
+### 9.1 Contributing
+
+Issues and pull requests are welcome. Before opening a pull request:
+
+1. Run `py -3.12 run.py setup --python-only` and `py -3.12 run.py verify`.
+2. Keep changes focused; do not modify `vendor/agnes-harness/`.
+3. Use synthetic data only. Never include real statements, identity tables, credentials, or case artifacts.
+4. Update both `README.md` and `README.zh-CN.md` when documentation changes.
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for details.
+
+### 9.2 Security
+
+Do not open a public issue for a vulnerability. Use the **Security** tab of this repository to open a private vulnerability report. Include the affected path, a reproduction using synthetic data, the impact, and a suggested fix. Never include real case data or credentials.
+
+See [SECURITY.md](SECURITY.md) for details.
+
+### 9.3 License and third-party notices
 
 - **Application code:** Apache License 2.0. See [LICENSE](LICENSE).
 - **Upstream runtime:** Agnes Harness, Apache License 2.0, pinned at commit `cde816b88c737b9fd04e7ef55b899e7b4cd55eb7`. The source is retained unmodified under `vendor/agnes-harness/`, together with its `LICENSE`, `NOTICE`, and third-party notices.

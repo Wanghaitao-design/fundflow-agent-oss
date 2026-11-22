@@ -10,7 +10,6 @@ __pycache__/
 .idea/
 .vscode/
 agent/deliverables/
-agent/range/reports/
 output/
 /结果/
 /private-data/
@@ -33,3 +32,46 @@ output/
 Thumbs.db
 desktop.ini
 ~$*
+
+# 民警版输出（本机生成的办案材料，不进仓库）
+/输出结果/
+# 探路包与打包产物（不进仓库）
+/probe-kit-windows.zip
+pack-probe/探路成品/
+pack-probe/探路-env/
+pack-probe/探路-临时/
+pack-probe/探路报告.txt
+
+# ── 真实／脱敏账单一律不进仓库（第 2026-11-11 条规矩：办案数据永不入库）──
+# 需要提交表格样表时，必须显式 git add -f 并在提交说明里写明来源
+*.xlsx
+*.xls
+*.et
+*.csv
+!agent/range/reports/*.csv
+!case_packs/**/*.csv
+!/资料/**.csv
+/资料/涉案材料/
+/涉案材料/
+/账单/
+/输入账单/
+/脱敏数据/
+
+# 测试评分报告（可复现成果的证据，要进仓库）
+!agent/range/reports/
+
+# 打包工作区与产物（不进仓库）
+build-exe/work-env/
+build-exe/work-tmp/
+build-exe/dist/
+build-exe/python-portable/
+build-exe/build-report.txt
+build-exe/officer-kit-*/
+/selftest-result.txt
+/中间结果/
+/出了点问题.txt
+/运行日志.txt
+/启动记录.txt
+build-exe/出了点问题.txt
+build-exe/运行日志.txt
+build-exe/启动记录.txt

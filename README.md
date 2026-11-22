@@ -163,7 +163,7 @@ The video walks through:
 |---|---|---|
 | **AGH runtime** | Execution loop, event ledger, approvals and sandbox, capability interfaces | Task execution, human confirmation of side effects, audit trail, and extension assembly |
 | **Domain extension layer** | 3 skills, 11 MCP tools, 2 governance hooks, domain knowledge base | Encodes the investigation workflow, rules, evidence requirements, and acceptance criteria |
-| **Compute layer** | stdio MCP server, `gambling_analysis.py`, pandas/numpy/scikit-learn/networkx | Statistics, rule evaluation, graph analysis, and path search with reproducible results |
+| **Compute layer** | stdio MCP server, `gambling_analysis.py`, pandas/numpy/networkx | Statistics, rule evaluation, graph analysis, and path search with reproducible results |
 | **Data and artifacts layer** | Synthetic range, `agent/deliverables/<dataset_id>/`, acceptance script | Generates scenarios, stores stage artifacts, and supports independent review |
 
 ### 3.2 Core modules

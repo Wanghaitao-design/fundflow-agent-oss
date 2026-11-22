@@ -46,7 +46,9 @@ class EvidenceAnalyzer(ga.GamblingAnalyzer):
 
     def _kmeans_clustering(self, X, node_list):
         # 本机 stdio 子进程的 OpenMP 线程过度调度会使微型聚类超时；限制计算线程不改算法参数。
-        from sklearn.cluster import KMeans
+        # 2026-11-12：原先这里白 import 了一次 KMeans（只是挂着不用）。
+        # 分析机的层级聚类已改成纯 numpy 手写，sklearn 不再是被依赖的库，
+        # 所以删掉这一行；限流照旧——numpy 的矩阵乘一样会起 OpenBLAS 线程。
         import os
         os.environ['LOKY_MAX_CPU_COUNT'] = '1'
         from threadpoolctl import threadpool_limits

@@ -1,0 +1,368 @@
+{
+  "report": "清白卷（尺子）：卷子里一个罪犯都没有，专门量程序会冤枉多少人",
+  "date": "2026-11-11",
+  "parameter_version": "default-v1-frozen-20261011",
+  "generator_version": "synthetic-v2",
+  "command": "MPLCONFIGDIR=/tmp/mplcache .venv/bin/python -X utf8 agent/range/evaluate.py --scenario s30_innocent_full_dev（另一份同法）",
+  "how_to_read": "真值全是清白，所以任何\"代理嫌疑\"\"赌客线索\"都是多事；待定外围是程序自己也说不上话的人。",
+  "scenarios": [
+    {
+      "scenario": "s30_innocent_full_dev",
+      "accounts": 30,
+      "truth": "全部为清白（无赌客、无代理、无水房）",
+      "flagged_as_agent": 15,
+      "flagged_as_gambler": 6,
+      "parked_as_unknown": 9,
+      "laundering_false_positive": 0,
+      "tier_confusion": [
+        {
+          "true": "清白",
+          "predicted": "三级代理嫌疑",
+          "count": 9
+        },
+        {
+          "true": "清白",
+          "predicted": "二级代理嫌疑",
+          "count": 6
+        },
+        {
+          "true": "清白",
+          "predicted": "待定外围",
+          "count": 9
+        },
+        {
+          "true": "清白",
+          "predicted": "赌客线索",
+          "count": 6
+        }
+      ],
+      "parameter_version": "default-v1-frozen-20261011",
+      "generator_version": "synthetic-v2",
+      "seed": 41001
+    },
+    {
+      "scenario": "s500_innocent_full_dev",
+      "accounts": 500,
+      "truth": "全部为清白（无赌客、无代理、无水房）",
+      "flagged_as_agent": 171,
+      "flagged_as_gambler": 53,
+      "parked_as_unknown": 276,
+      "laundering_false_positive": 2,
+      "tier_confusion": [
+        {
+          "true": "清白",
+          "predicted": "三级代理嫌疑",
+          "count": 98
+        },
+        {
+          "true": "清白",
+          "predicted": "二级代理嫌疑",
+          "count": 73
+        },
+        {
+          "true": "清白",
+          "predicted": "待定外围",
+          "count": 276
+        },
+        {
+          "true": "清白",
+          "predicted": "赌客线索",
+          "count": 53
+        }
+      ],
+      "parameter_version": "default-v1-frozen-20261011",
+      "generator_version": "synthetic-v2",
+      "seed": 41002
+    }
+  ],
+  "by_group": [
+    {
+      "scenario": "s30_innocent_full_dev",
+      "group": "一起吃饭的",
+      "accounts": 3,
+      "flagged_as_agent": 0,
+      "flagged_as_gambler": 0,
+      "parked_as_unknown": 3
+    },
+    {
+      "scenario": "s30_innocent_full_dev",
+      "group": "亲属",
+      "accounts": 2,
+      "flagged_as_agent": 0,
+      "flagged_as_gambler": 2,
+      "parked_as_unknown": 0
+    },
+    {
+      "scenario": "s30_innocent_full_dev",
+      "group": "代收饭费的",
+      "accounts": 1,
+      "flagged_as_agent": 1,
+      "flagged_as_gambler": 0,
+      "parked_as_unknown": 0
+    },
+    {
+      "scenario": "s30_innocent_full_dev",
+      "group": "医院",
+      "accounts": 1,
+      "flagged_as_agent": 1,
+      "flagged_as_gambler": 0,
+      "parked_as_unknown": 0
+    },
+    {
+      "scenario": "s30_innocent_full_dev",
+      "group": "发工资的公司",
+      "accounts": 1,
+      "flagged_as_agent": 0,
+      "flagged_as_gambler": 1,
+      "parked_as_unknown": 0
+    },
+    {
+      "scenario": "s30_innocent_full_dev",
+      "group": "小卖部",
+      "accounts": 1,
+      "flagged_as_agent": 1,
+      "flagged_as_gambler": 0,
+      "parked_as_unknown": 0
+    },
+    {
+      "scenario": "s30_innocent_full_dev",
+      "group": "开饭馆的",
+      "accounts": 1,
+      "flagged_as_agent": 1,
+      "flagged_as_gambler": 0,
+      "parked_as_unknown": 0
+    },
+    {
+      "scenario": "s30_innocent_full_dev",
+      "group": "操办喜事的",
+      "accounts": 1,
+      "flagged_as_agent": 1,
+      "flagged_as_gambler": 0,
+      "parked_as_unknown": 0
+    },
+    {
+      "scenario": "s30_innocent_full_dev",
+      "group": "普通上班族",
+      "accounts": 4,
+      "flagged_as_agent": 2,
+      "flagged_as_gambler": 1,
+      "parked_as_unknown": 1
+    },
+    {
+      "scenario": "s30_innocent_full_dev",
+      "group": "来吃饭的",
+      "accounts": 3,
+      "flagged_as_agent": 0,
+      "flagged_as_gambler": 0,
+      "parked_as_unknown": 3
+    },
+    {
+      "scenario": "s30_innocent_full_dev",
+      "group": "牵头凑钱的",
+      "accounts": 1,
+      "flagged_as_agent": 1,
+      "flagged_as_gambler": 0,
+      "parked_as_unknown": 0
+    },
+    {
+      "scenario": "s30_innocent_full_dev",
+      "group": "自己的银行卡",
+      "accounts": 1,
+      "flagged_as_agent": 1,
+      "flagged_as_gambler": 0,
+      "parked_as_unknown": 0
+    },
+    {
+      "scenario": "s30_innocent_full_dev",
+      "group": "跑夜车的",
+      "accounts": 1,
+      "flagged_as_agent": 1,
+      "flagged_as_gambler": 0,
+      "parked_as_unknown": 0
+    },
+    {
+      "scenario": "s30_innocent_full_dev",
+      "group": "送货的",
+      "accounts": 1,
+      "flagged_as_agent": 1,
+      "flagged_as_gambler": 0,
+      "parked_as_unknown": 0
+    },
+    {
+      "scenario": "s30_innocent_full_dev",
+      "group": "酒店",
+      "accounts": 1,
+      "flagged_as_agent": 1,
+      "flagged_as_gambler": 0,
+      "parked_as_unknown": 0
+    },
+    {
+      "scenario": "s30_innocent_full_dev",
+      "group": "随份子的",
+      "accounts": 3,
+      "flagged_as_agent": 0,
+      "flagged_as_gambler": 2,
+      "parked_as_unknown": 1
+    },
+    {
+      "scenario": "s30_innocent_full_dev",
+      "group": "领工资的",
+      "accounts": 3,
+      "flagged_as_agent": 3,
+      "flagged_as_gambler": 0,
+      "parked_as_unknown": 0
+    },
+    {
+      "scenario": "s30_innocent_full_dev",
+      "group": "饭店",
+      "accounts": 1,
+      "flagged_as_agent": 0,
+      "flagged_as_gambler": 0,
+      "parked_as_unknown": 1
+    },
+    {
+      "scenario": "s500_innocent_full_dev",
+      "group": "一起吃饭的",
+      "accounts": 50,
+      "flagged_as_agent": 0,
+      "flagged_as_gambler": 0,
+      "parked_as_unknown": 50
+    },
+    {
+      "scenario": "s500_innocent_full_dev",
+      "group": "亲属",
+      "accounts": 41,
+      "flagged_as_agent": 0,
+      "flagged_as_gambler": 41,
+      "parked_as_unknown": 0
+    },
+    {
+      "scenario": "s500_innocent_full_dev",
+      "group": "代收饭费的",
+      "accounts": 1,
+      "flagged_as_agent": 1,
+      "flagged_as_gambler": 0,
+      "parked_as_unknown": 0
+    },
+    {
+      "scenario": "s500_innocent_full_dev",
+      "group": "医院",
+      "accounts": 1,
+      "flagged_as_agent": 1,
+      "flagged_as_gambler": 0,
+      "parked_as_unknown": 0
+    },
+    {
+      "scenario": "s500_innocent_full_dev",
+      "group": "发工资的公司",
+      "accounts": 1,
+      "flagged_as_agent": 1,
+      "flagged_as_gambler": 0,
+      "parked_as_unknown": 0
+    },
+    {
+      "scenario": "s500_innocent_full_dev",
+      "group": "小卖部",
+      "accounts": 1,
+      "flagged_as_agent": 1,
+      "flagged_as_gambler": 0,
+      "parked_as_unknown": 0
+    },
+    {
+      "scenario": "s500_innocent_full_dev",
+      "group": "开饭馆的",
+      "accounts": 1,
+      "flagged_as_agent": 1,
+      "flagged_as_gambler": 0,
+      "parked_as_unknown": 0
+    },
+    {
+      "scenario": "s500_innocent_full_dev",
+      "group": "操办喜事的",
+      "accounts": 1,
+      "flagged_as_agent": 1,
+      "flagged_as_gambler": 0,
+      "parked_as_unknown": 0
+    },
+    {
+      "scenario": "s500_innocent_full_dev",
+      "group": "普通上班族",
+      "accounts": 239,
+      "flagged_as_agent": 104,
+      "flagged_as_gambler": 0,
+      "parked_as_unknown": 135
+    },
+    {
+      "scenario": "s500_innocent_full_dev",
+      "group": "来吃饭的",
+      "accounts": 41,
+      "flagged_as_agent": 0,
+      "flagged_as_gambler": 0,
+      "parked_as_unknown": 41
+    },
+    {
+      "scenario": "s500_innocent_full_dev",
+      "group": "牵头凑钱的",
+      "accounts": 1,
+      "flagged_as_agent": 1,
+      "flagged_as_gambler": 0,
+      "parked_as_unknown": 0
+    },
+    {
+      "scenario": "s500_innocent_full_dev",
+      "group": "自己的银行卡",
+      "accounts": 12,
+      "flagged_as_agent": 12,
+      "flagged_as_gambler": 0,
+      "parked_as_unknown": 0
+    },
+    {
+      "scenario": "s500_innocent_full_dev",
+      "group": "跑夜车的",
+      "accounts": 12,
+      "flagged_as_agent": 12,
+      "flagged_as_gambler": 0,
+      "parked_as_unknown": 0
+    },
+    {
+      "scenario": "s500_innocent_full_dev",
+      "group": "送货的",
+      "accounts": 1,
+      "flagged_as_agent": 1,
+      "flagged_as_gambler": 0,
+      "parked_as_unknown": 0
+    },
+    {
+      "scenario": "s500_innocent_full_dev",
+      "group": "酒店",
+      "accounts": 1,
+      "flagged_as_agent": 1,
+      "flagged_as_gambler": 0,
+      "parked_as_unknown": 0
+    },
+    {
+      "scenario": "s500_innocent_full_dev",
+      "group": "随份子的",
+      "accounts": 62,
+      "flagged_as_agent": 0,
+      "flagged_as_gambler": 12,
+      "parked_as_unknown": 50
+    },
+    {
+      "scenario": "s500_innocent_full_dev",
+      "group": "领工资的",
+      "accounts": 33,
+      "flagged_as_agent": 33,
+      "flagged_as_gambler": 0,
+      "parked_as_unknown": 0
+    },
+    {
+      "scenario": "s500_innocent_full_dev",
+      "group": "饭店",
+      "accounts": 1,
+      "flagged_as_agent": 1,
+      "flagged_as_gambler": 0,
+      "parked_as_unknown": 0
+    }
+  ]
+}

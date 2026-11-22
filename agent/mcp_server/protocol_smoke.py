@@ -74,7 +74,9 @@ async def main():
     assert '主线程预载完成' in preload, preload
     prewarm = (DELIVERABLES / '_prewarm.log').read_text(encoding='utf-8')
     imports = [json.loads(line) for line in prewarm.splitlines() if line.startswith('{')]
-    source = next(record['sklearn_file'] for record in imports if record.get('status') == 'imports-ok')
+    # 2026-11-12：这条断言的本意是「预热用的库来自我们自己的 venv，不是系统 Python」，
+    # 原来盯的是 sklearn 的路径；分析机改用 numpy 后改盯 numpy，本意不变。
+    source = next(record['numpy_file'] for record in imports if record.get('status') == 'imports-ok')
     assert Path(source).resolve().is_relative_to(Path(sys.prefix).resolve()), source
     output = ('PASS 子进程预热：' + json.dumps(state, ensure_ascii=False)
               + '\nPASS 每工具耗时（秒）：' + json.dumps(timings)

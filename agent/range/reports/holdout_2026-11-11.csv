@@ -1,0 +1,4 @@
+﻿scenario,split,status,seconds,parameter_version,accounts,failure_count,tier_valid,tier_correct,tier_failed,tier_accuracy,laundering_valid,laundering_failed,TP,FN,FP,TN,laundering_recall,false_positive_rate
+s100_noise_missing_holdout,holdout,部分,3.3875,default-v1-frozen-20261011,100,2,95,89,0,0.9368421052631579,100,0,2,0,5,93,1.0,0.05102040816326531
+s500_clean_full_holdout,holdout,完整,14.4311,default-v1-frozen-20261011,500,0,495,486,0,0.9818181818181818,500,0,2,0,25,473,1.0,0.050200803212851405
+汇总,holdout,部分,17.8186,default-v1-frozen-20261011,600,2,590,575,0,0.9745762711864406,600,0,4,0,30,566,1.0,0.050335570469798654

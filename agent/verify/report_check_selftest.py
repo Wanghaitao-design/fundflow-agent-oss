@@ -34,14 +34,27 @@ def main():
             if warning:assert any(warning in w for w in r['警告']),(name,r)
             cases[name]=r['状态']
         data = json.loads(evidence.read_text(encoding='utf-8'))
-        gambler_count = data['工具结果']['05_tiers']['结论']['层级分布']['赌客线索']
-        htmlcase('层级分布',lambda s:s.replace(f'赌客线索&quot;: {gambler_count}', '赌客线索&quot;: 999'))
+        # 取一个真在样例里出现的层级（固定线复核之后样例账单可能一个赌客都不剩，写死"赌客线索"会 KeyError）
+        dist=data['工具结果']['05_tiers']['结论']['层级分布']
+        level_key=next(iter(dist));level_count=dist[level_key]
+        htmlcase('层级分布',lambda s:s.replace(f'{level_key}&quot;: {level_count}', f'{level_key}&quot;: 999'))
         htmlcase('节点数自由文本',lambda s:s.replace('<h2>组织结构</h2>','<h2>组织结构</h2><p>节点数：999</p>'))
         htmlcase('边数自由文本',lambda s:s.replace('<h2>组织结构</h2>','<h2>组织结构</h2><p>边数：999</p>'))
         htmlcase('洗钱命中数',lambda s:s.replace('<h2>洗钱线索</h2>','<h2>洗钱线索</h2><p>洗钱命中数：999</p>'))
         htmlcase('坏文件总数',lambda s:s.replace('<h2>数据来源与完整性</h2>','<h2>数据来源与完整性</h2><p>坏文件数：999</p>'))
         htmlcase('失败原因',lambda s:s.replace('无法解析文件格式','故意篡改原因'))
-        htmlcase('结构失败',lambda s:s.replace('_detect_time_patterns','hidden_detector'))
+        # 「结构检测失败」这条负例重写：老 numpy bug 修好后七个检测器全是「完成」，
+        # 原先那种「把检测器名字从正文里藏掉就应该 FAIL」已经不成立（检测器跑完时正文本来就不写它名字）。
+        # 改成照真实情形造负例：证据说某检测器失败、正文没写 → 必须 FAIL；正文写了名字和原因 → 只报警告不许 FAIL。
+        report,evidence=fresh();data=json.loads(evidence.read_text(encoding='utf-8'))
+        struct=data['工具结果']['05_structure']['结论'];struct['完整']=False
+        struct['检测器状态']['_detect_time_patterns']={'状态':'失败','原因':'故意造的假原因XYZ'}
+        evidence.write_text(json.dumps(data,ensure_ascii=False),encoding='utf-8')
+        r=check(root);assert r['状态']=='FAIL' and any('结构检测失败未在报告正文显式列出' in i for i in r['问题']),r
+        cases['结构失败未披露']='FAIL'
+        report.write_text(report.read_text(encoding='utf-8').replace('</body>','<p>_detect_time_patterns 故意造的假原因XYZ</p></body>'),encoding='utf-8')
+        r=check(root);assert r['状态']=='PASS' and any('结构检测不完整' in w for w in r['警告']),r
+        cases['结构失败已披露']='PASS+warning'
         htmlcase('正文金额单位',lambda s:s.replace('</body>','<p>金额单位：万元</p></body>'))
         htmlcase('免责句缺失',lambda s:s.replace('仅供侦查核实，嫌疑≠司法结论。','').replace('最终司法结论由司法机关作出',''))
         htmlcase('禁用词',lambda s:s.replace('</body>','<p>已认定犯罪事实并定罪</p></body>'))

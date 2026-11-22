@@ -24,6 +24,9 @@ from pathlib import Path
 from typing import Optional
 
 import pandas as pd
+# numpy 只在这里导一次：函数里再写一遍 import numpy as np 会把 np 变成局部变量，
+# 该函数前面任何一处 np. 都会变成 UnboundLocalError（2026-11-11 AMLSim 考场抓到，
+# _detect_credit_allocation 分配笔数<=3 时必崩）。要优化导入请另想办法，别在函数内重名导入。
 import numpy as np
 import networkx as nx
 import plotly.graph_objects as go
@@ -40,17 +43,90 @@ _BASE_DIR = Path(__file__).parent
 OUTPUT_DIR = _BASE_DIR / ("结果" if (_BASE_DIR / "结果").exists() else "output")
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
-# 网赌相关关键词（可自行扩充）
-GAMBLING_KEYWORDS = [
-    '博彩', '彩票', '竞猜', '足彩', '欧赔', '亚盘', '走地', '让球',
-    '棋牌', '德州', '百家乐', '轮盘', '骰子', '老虎机', '捕鱼',
-    '充值', '提现', '返点', '洗码', '代理', '招募', '下注', '赔率',
-    'bet', 'sport', 'game', '球队', '比分', '赛事',
-]
+# ── 案由包：词表和门槛数字都从 case_packs/<包名>/ 读，不在代码里写死 ──
+from case_pack import CasePack, CasePackError, get_pack
+
+
+class _判据表哑对象:
+    """判据表读不出来时顶一下的空壳，不是备用判据。
+
+    只许在下面的模块级常量那一趟顶空值（空词表、门槛 0），读完立刻封上；
+    之后谁再用它取值就当场抛 CasePackError。
+    这么写的目的两句话：① import 绝不炸——打成 exe 双击能看见报错，不是闪一下就没；
+    ② 但绝不拿空词表和 0 门槛悄悄算一份成绩单出来（那是第二个"换简易算法"黑洞）。
+    """
+
+    def __init__(self, 原因):
+        self.原因 = 原因
+        self.已封 = False
+
+    def 封上(self):
+        self.已封 = True
+
+    def _问一遍(self):
+        if self.已封:
+            raise CasePackError('判据表没读出来，这份值不能用：' + self.原因)
+
+    def words(self, *groups):
+        self._问一遍()
+        return []
+
+    def num(self, key):
+        self._问一遍()
+        return 0
+
+    def describe(self):
+        return '判据表读不出来：' + self.原因
+
+
+# 以前这里是 PACK = CasePack()：import 的当口就去找表，表缺了就整个模块 import 失败。
+# 2026-11-12 改成读不到先记下原因、import 照样过；真开分析机时（GamblingAnalyzer）再抛。
+PACK_ERROR = ''
+try:
+    PACK = get_pack()      # 换案由 = 设环境变量 FUNDFLOW_CASE_PACK，或改 case_pack.PACKS
+except Exception as _表错:      # 表缺失 / 表改坏 / 编码不对，一律接住，不让 import 炸
+    PACK_ERROR = '%s: %s' % (type(_表错).__name__, _表错)
+    PACK = _判据表哑对象(PACK_ERROR)
+
+# 网赌相关关键词（来自案由包词表）
+GAMBLING_KEYWORDS = PACK.words('平台玩法', '资金性质')
+ACCOUNTANT_KEYWORDS     = PACK.words('抽成分发')   # 上下级抽成/做账
+CREDIT_INJECT_KEYWORDS  = PACK.words('额度注入')   # 每周打额度
+CREDIT_ALLOC_KEYWORDS   = PACK.words('额度分配')   # 往上领额度往下发
+SETTLEMENT_KEYWORDS     = PACK.words('结算还款')   # 大额结算
+CREDIT_SETTLE_KEYWORDS  = PACK.words('额度结算')   # 信用额度结算
 
 # 时间聚集阈值（分钟）- 短时间内大量交易视为批量操作
-BURST_TIME_WINDOW = 5
-BURST_MIN_COUNT = 5
+BURST_TIME_WINDOW = PACK.num('集中转账窗口分钟')
+BURST_MIN_COUNT = PACK.num('集中转账最少笔数')
+ACCOUNTANT_MIN_RECIPIENTS   = PACK.num('抽成最少收款人数')
+ACCOUNTANT_AMOUNT_CV        = PACK.num('抽成金额波动上限')
+CREDIT_CYCLE_MIN_DAYS       = PACK.num('周期天数下限')
+CREDIT_CYCLE_MAX_DAYS       = PACK.num('周期天数上限')
+CREDIT_INJECT_AMOUNT_CV     = PACK.num('注入金额波动上限')
+CREDIT_ALLOC_MIN_RECIPIENTS = PACK.num('分配最少人数')
+CREDIT_ALLOC_AMOUNT_CV      = PACK.num('分配金额波动上限')
+LARGE_SETTLEMENT_MIN        = PACK.num('大额结算金额下限')
+LARGE_SETTLEMENT_AVG_MIN      = PACK.num('大额结算平均金额下限')  # 几笔大额的平均数还要到这个数才打「大额结算」标记（原代码写死50万，2026-11-11 搬进表，数值未改）
+CREDIT_SETTLE_MIN           = PACK.num('信用结算金额下限')
+FAST_OUT_RATIO              = PACK.num('快转转出占比')
+ROUND_RATIO_MIN             = PACK.num('整千占比')
+SINGLE_LINE_MAX_RELATIONS   = PACK.num('单线最多往来人数')
+PERIPHERAL_MAX_TOTAL        = PACK.num('外围总流水上限')
+PERIPHERAL_MAX_RELATIONS    = PACK.num('外围最多往来人数')
+GAMBLER_MAX_OUTD            = PACK.num('赌客最多转出人数')
+GAMBLER_MAX_IND             = PACK.num('赌客最多收款人数')
+GAMBLER_NET_OUT_RATIO_MIN   = PACK.num('赌客净支出占比下限')
+
+# ── 固定线复核（2026-11-11）：不看本批人排名，只看绝对量 ──────────────────
+# 数值、出处、谁定的都写在 case_packs/wangdu/03_门槛.csv，代码里不写死
+AGENT_MIN_INFLOW   = PACK.num('代理嫌疑累计流入下限')   # 累计流入不到这个数，不往代理方向看
+AGENT_BIG_INFLOW   = PACK.num('代理嫌疑大钱线')         # 收到这么多钱，就算给他转钱的人不够多也照样看一眼（兜住上级只打给一个人、他再往下拆那种）
+AGENT_MIN_IN_DEG   = PACK.num('代理嫌疑最少付款人数')   # 最少几个独立账户给他转过钱
+AGENT_MIN_IN_DAYS  = PACK.num('代理嫌疑最少收款天数')   # 收款最少跨几个自然日
+AGENT_MIN_OUT_DEG  = PACK.num('代理嫌疑最少转出人数')   # 代理要往下发钱，一个下级都没有不算代理
+GAMBLER_MIN_OUTFLOW = PACK.num('赌客嫌疑累计流出下限')  # 一次性小额支出不算赌客线索
+GAMBLER_MIN_DAYS    = PACK.num('赌客嫌疑最少往来天数')  # 只往来一天的（凑钱、随礼、还款）不算赌客线索
 
 # ── 人员层级体系（赌球团伙金字塔结构）──────────────────────────────────────
 # 层级编号（数字越小层级越高）
@@ -61,27 +137,23 @@ LEVEL_GAMBLER = 4   # 赌客（会员）：只有小额充值/投注，极少向
 LEVEL_UNKNOWN = 5   # 账务/洗钱/待定外围人员（无法归类到上述四类）
 
 # 层级阈值（依据典型网赌案例经验值，可根据实际数据调整）
-LEVEL1_MIN_INFLOW  = 500_000   # 一级代理：累计流入 >= 50万
-LEVEL2_MIN_INFLOW  = 50_000    # 二级代理：累计流入 >= 5万
-LEVEL3_MIN_INFLOW  = 5_000     # 三级代理：累计流入 >= 5千
+LEVEL1_MIN_INFLOW  = PACK.num('一级固定流入线')   # 一级代理：累计流入 >= 50万（下面没有任何判据用它）
+LEVEL2_MIN_INFLOW  = PACK.num('中转最低流水')     # 只用在整数金额和单线中转两条判据上
+LEVEL3_MIN_INFLOW  = PACK.num('三级固定流入线')   # 三级代理：累计流入 >= 5千（下面没有任何判据用它）
 # 赌客：流入 < 5千，或几乎只有支出，下游出度极少
 
 # ── 洗钱识别参数 ────────────────────────────────────────────────────────
 # 境外账户关键词（转账对方账号/备注含这些词，视为境外资金流动）
-OVERSEAS_KEYWORDS = [
-    'overseas', 'international', '境外', '海外', '汇款', '外汇',
-    'usdt', 'btc', 'bitcoin', 'eth', 'crypto', 'tether',
-    'western union', 'moneygram', 'paypal', 'wise', 'payoneer',
-    '澳门', '香港', 'hk', 'macau', 'philippines', '菲律宾',
-    '柬埔寨', 'cambodia', '缅甸', 'myanmar', '越南', 'vietnam',
-    'overseas_transfer', 'remittance',
-]
+OVERSEAS_KEYWORDS = PACK.words('境外通道')
 
 # 洗钱特征阈值
-MONEY_LAUNDER_TRANSIT_RATIO = 0.8   # 流入后 >=80% 转出：典型中转账户
-MONEY_LAUNDER_MIN_FLOW      = 30_000  # 至少 3万流水才纳入洗钱分析
-MONEY_LAUNDER_MAX_BALANCE_RATIO = 0.15  # 净余额 < 流入 15%：钱没有留存，只是过路
-MONEY_LAUNDER_BURST_INTERVAL = 24   # 小时：收到钱后 24h 内转出视为高风险中转
+MONEY_LAUNDER_TRANSIT_RATIO = PACK.num('过路转出占比')   # 流入后 >=80% 转出：典型中转账户
+MONEY_LAUNDER_MIN_FLOW      = PACK.num('洗钱最低流水')  # 至少 3万流水才纳入洗钱分析
+MONEY_LAUNDER_MAX_BALANCE_RATIO = PACK.num('结余占比上限')  # 净余额 < 流入 15%：钱没有留存，只是过路
+MONEY_LAUNDER_BURST_INTERVAL = PACK.num('快转窗口小时')   # 小时：收到钱后 24h 内转出视为高风险中转
+
+if PACK_ERROR:
+    PACK.封上()   # 上面的常量已取完空值；此后谁再用这份哑表取值，当场报错，不许拿 0 算
 
 
 # ═══════════════════════════════════════════════════════════
@@ -953,6 +1025,85 @@ def _smart_label(name: str, node: str, max_len: int = 8) -> str:
     return name[:6] + '…' + name[-4:]
 
 
+def _zscore(X: 'np.ndarray') -> 'np.ndarray':
+    """每列减均值、除以均方差（ddof=0）——和 sklearn StandardScaler 同一套算法。
+
+    整列数一个样（方差 0）时 sklearn 输出 0，这里也输出 0，不留 NaN。
+    """
+    X = np.asarray(X, dtype=np.float64)
+    均 = X.mean(axis=0)
+    差 = X - 均
+    标 = np.sqrt((差 * 差).mean(axis=0))
+    标 = np.where(标 == 0, 1.0, 标)
+    return 差 / 标
+
+
+def _kmeans_numpy(X, k: int, seed: int = 42, n_init: int = 10,
+                  max_iter: int = 300, tol: float = 1e-4):
+    """手写 k-means++（只依赖 numpy）。返回 (标签数组, 惯性 inertia)。
+
+    为什么自己写而不用 sklearn（2026-11-12，理由的完整版在 算法对照/双跑结果-2026-11-12.md）：
+      · "拷到办案电脑什么都不用装"这句承诺不能指望微软运行库装没装；
+      · 360 那类安全软件按文件名拦 vcomp140/msvcp140 这几个 dll，包里有它们就是雷；
+      · 原来"sklearn 用不了就换简易算法"这条回退，会让同一份账单在两台电脑上出两个答案。
+        现在只有一条路，也就没有"本机用的是哪套算法"这一行了。
+    可复现性写在代码里：种子默认 42、初始化 10 次取惯性最小的一次、最多迭代 300 轮，
+    同样数据跑两次标签必须一模一样。
+    """
+    X = np.asarray(X, dtype=np.float64)
+    if X.ndim != 2:
+        raise ValueError(f'聚类输入必须是二维矩阵，现在是 {X.shape}')
+    点, 维 = X.shape
+    if k < 1 or k > 点:
+        raise ValueError(f'簇数 k={k} 和账号数 {点} 配不上（要 1 ≤ k ≤ 账号数）')
+    if not np.isfinite(X).all():
+        坏 = sorted(np.unique(np.where(~np.isfinite(X))[1]).tolist())
+        raise ValueError(f'特征矩阵里有 NaN/Inf，不能拿去聚类（第 {坏} 列）。这是数据问题，不猜答案')
+
+    随机 = np.random.default_rng(seed)
+    容差 = tol * 维
+    最佳标签, 最佳惯性 = None, None
+
+    for _次 in range(n_init):
+        # ── k-means++ 挑初始中心：离已选中心越远的点越可能被选中 ──
+        中心 = np.empty((k, 维), dtype=np.float64)
+        中心[0] = X[随机.integers(点)]
+        for i in range(1, k):
+            已选 = X[:, None, :] - 中心[None, :i, :]
+            最近 = (已选 * 已选).sum(axis=2).min(axis=1)
+            总 = float(最近.sum())
+            if 总 <= 0:                       # 剩下的点全压在已选中心上，随机补一个
+                中心[i] = X[随机.integers(点)]
+                continue
+            累计 = np.cumsum(最近)
+            中心[i] = X[int(np.searchsorted(累计, float(随机.random()) * 总))]
+
+        标签 = np.zeros(点, dtype=np.int64)
+        惯性 = float('inf')
+        for _轮 in range(max_iter):
+            距 = ((X[:, None, :] - 中心[None, :, :]) ** 2).sum(axis=2)
+            新标签 = np.argmin(距, axis=1)
+            for j in range(k):                # 空簇：把离自己中心最远的点搬进来，簇不许丢
+                if (新标签 == j).any():
+                    continue
+                各点距 = 距[np.arange(点), 新标签]
+                新标签[int(np.argmax(各点距))] = j
+            新中心 = 中心.copy()
+            for j in range(k):
+                成员 = 新标签 == j
+                新中心[j] = X[成员].mean(axis=0)
+            移动 = float(((新中心 - 中心) ** 2).sum())
+            中心, 标签 = 新中心, 新标签
+            惯性 = float(((X - 中心[标签]) ** 2).sum())
+            if 移动 <= 容差:
+                break
+
+        if 最佳惯性 is None or 惯性 < 最佳惯性:
+            最佳标签, 最佳惯性 = 标签.copy(), 惯性
+
+    return 最佳标签, 最佳惯性
+
+
 # ═══════════════════════════════════════════════════════════
 # 模块三：核心分析引擎
 # ═══════════════════════════════════════════════════════════
@@ -960,6 +1111,8 @@ class GamblingAnalyzer:
     """主分析引擎"""
 
     def __init__(self, transactions: pd.DataFrame, identity: IdentityMapper):
+        if PACK_ERROR:
+            raise CasePackError('判据表读不出来，分析机不能开工。原因 -> ' + PACK_ERROR)
         self.tx = transactions.copy()
         self.identity = identity
         self.nodes = {}   # node_id → {name, level, metrics}
@@ -1523,24 +1676,23 @@ class GamblingAnalyzer:
         for account, payments in account_payments.items():
             # 至少向5个不同账号转账
             unique_recipients = len(set(p['cp'] for p in payments))
-            if unique_recipients < 5:
+            if unique_recipients < ACCOUNTANT_MIN_RECIPIENTS:
                 continue
             
             # 检查是否有做账相关关键词
             has_accountant_keywords = any(
                 kw in p['remark'] for p in payments for kw in 
-                ['抽成', '分红', '佣金', '返利', '分成', '工资', '奖金']
+                ACCOUNTANT_KEYWORDS
             )
             
             # 检查转账金额是否相似（可能是固定比例的抽成）
             amounts = [p['amount'] for p in payments if p['amount'] > 0]
             if len(amounts) > 5:
                 # 计算金额的标准差
-                import numpy as np
                 mean_amt = np.mean(amounts)
                 std_amt = np.std(amounts)
                 # 标准差与均值的比例小于0.3，说明金额较为相似
-                if std_amt / mean_amt < 0.3:
+                if std_amt / mean_amt < ACCOUNTANT_AMOUNT_CV:
                     accountants[account] = {
                         'recipient_count': unique_recipients,
                         'payment_count': len(payments),
@@ -1676,10 +1828,9 @@ class GamblingAnalyzer:
             # 检查是否有7天左右的周期性
             has_weekly_pattern = False
             if time_intervals:
-                import numpy as np
                 mean_interval = np.mean(time_intervals)
                 # 时间间隔在6-8天之间，视为周周期
-                if 6 <= mean_interval <= 8:
+                if CREDIT_CYCLE_MIN_DAYS <= mean_interval <= CREDIT_CYCLE_MAX_DAYS:
                     has_weekly_pattern = True
             
             # 检查金额是否稳定
@@ -1689,13 +1840,13 @@ class GamblingAnalyzer:
                 mean_amt = np.mean(amounts)
                 std_amt = np.std(amounts)
                 # 标准差与均值的比例小于0.2，说明金额较为稳定
-                if std_amt / mean_amt < 0.2:
+                if std_amt / mean_amt < CREDIT_INJECT_AMOUNT_CV:
                     has_stable_amount = True
             
             # 检查是否有信用额度相关关键词
             has_credit_keywords = any(
                 kw in t['remark'] for t in income_tx for kw in 
-                ['额度', '注入', '信用', '皇冠', '平台', '周额']
+                CREDIT_INJECT_KEYWORDS
             )
             
             # 综合判断
@@ -1753,7 +1904,7 @@ class GamblingAnalyzer:
         outgoing_tx = tx[tx['is_income'] == False].copy()
         
         # 筛选大额交易
-        large_tx = outgoing_tx[outgoing_tx['amount_clean'] >= 500000].copy()  # 50万以上视为大额
+        large_tx = outgoing_tx[outgoing_tx['amount_clean'] >= LARGE_SETTLEMENT_MIN].copy()  # 大额线，写在案由包里
         if large_tx.empty:
             return {}
 
@@ -1789,7 +1940,7 @@ class GamblingAnalyzer:
             # 检查是否有结算相关关键词
             has_settlement_keywords = any(
                 kw in s['remark'] for s in settlements for kw in 
-                ['结算', '还款', '赌债', '周结', '皇冠', '平台', '信用', '额度']
+                SETTLEMENT_KEYWORDS
             )
             
             # 检查是否有周期性
@@ -1831,16 +1982,15 @@ class GamblingAnalyzer:
                     except Exception:
                         continue
                 if intervals:
-                    import numpy as np
                     mean_interval = np.mean(intervals)
                     # 时间间隔在6-8天之间，视为周周期
-                    if 6 <= mean_interval <= 8:
+                    if CREDIT_CYCLE_MIN_DAYS <= mean_interval <= CREDIT_CYCLE_MAX_DAYS:
                         has_periodic_pattern = True
             
             # 检查交易金额是否特别大
             total_amount = sum(s['amount'] for s in settlements)
             avg_amount = total_amount / len(settlements)
-            is_large_amount = avg_amount >= 500000  # 平均50万以上
+            is_large_amount = avg_amount >= LARGE_SETTLEMENT_AVG_MIN  # 平均线，数值在案由包 03_门槛.csv
             
             # 综合判断
             if (has_settlement_keywords and is_large_amount) or \
@@ -1926,18 +2076,17 @@ class GamblingAnalyzer:
             # 检查是否有信用额度相关关键词
             has_credit_keywords = any(
                 kw in a['remark'] for a in allocations for kw in 
-                ['额度', '分配', '分包', '代理', '皇冠', '平台', '信用']
+                CREDIT_ALLOC_KEYWORDS
             )
             
             # 检查分配金额是否相似（可能是固定比例的信用额度）
             amounts = [a['amount'] for a in allocations if a['amount'] > 0]
             has_similar_amounts = False
             if len(amounts) > 3:
-                import numpy as np
                 mean_amt = np.mean(amounts)
                 std_amt = np.std(amounts)
                 # 标准差与均值的比例小于0.4，说明金额较为相似
-                if std_amt / mean_amt < 0.4:
+                if std_amt / mean_amt < CREDIT_ALLOC_AMOUNT_CV:
                     has_similar_amounts = True
             
             # 检查是否有周期性
@@ -1981,13 +2130,13 @@ class GamblingAnalyzer:
                 if intervals:
                     mean_interval = np.mean(intervals)
                     # 时间间隔在6-8天之间，视为周周期
-                    if 6 <= mean_interval <= 8:
+                    if CREDIT_CYCLE_MIN_DAYS <= mean_interval <= CREDIT_CYCLE_MAX_DAYS:
                         has_periodic_pattern = True
             
             # 综合判断
-            if (has_credit_keywords and unique_recipients >= 3) or \
-               (has_similar_amounts and unique_recipients >= 3) or \
-               (has_periodic_pattern and unique_recipients >= 3):
+            if (has_credit_keywords and unique_recipients >= CREDIT_ALLOC_MIN_RECIPIENTS) or \
+               (has_similar_amounts and unique_recipients >= CREDIT_ALLOC_MIN_RECIPIENTS) or \
+               (has_periodic_pattern and unique_recipients >= CREDIT_ALLOC_MIN_RECIPIENTS):
                 credit_allocation_info[account] = {
                     'recipient_count': unique_recipients,
                     'allocation_count': len(allocations),
@@ -2111,20 +2260,19 @@ class GamblingAnalyzer:
             # 检查是否有7天左右的周期性
             has_weekly_pattern = False
             if time_intervals:
-                import numpy as np
                 mean_interval = np.mean(time_intervals)
                 # 时间间隔在6-8天之间，视为周结算周期
-                if 6 <= mean_interval <= 8:
+                if CREDIT_CYCLE_MIN_DAYS <= mean_interval <= CREDIT_CYCLE_MAX_DAYS:
                     has_weekly_pattern = True
             
             # 检查是否有大额交易
-            large_transactions = [t for t in transactions if t['amount'] >= 50000]  # 5万以上视为大额
+            large_transactions = [t for t in transactions if t['amount'] >= CREDIT_SETTLE_MIN]  # 大额线，写在案由包里
             has_large_transactions = len(large_transactions) >= 1
             
             # 检查备注关键词
             has_credit_keywords = any(
                 kw in t['remark'] for t in transactions for kw in 
-                ['结算', '信用', '额度', '充值', '周结', '皇冠', '平台']
+                CREDIT_SETTLE_KEYWORDS
             )
             
             # 检查是否有从上级代理接收资金（信用额度注入）
@@ -2352,7 +2500,6 @@ class GamblingAnalyzer:
 
     def _build_feature_matrix(self, node_list: list, topo_depth: dict) -> 'np.ndarray':
         """构建节点特征向量矩阵"""
-        import numpy as np
         max_depth = max(topo_depth.values(), default=0) or 1
         feature_matrix = []
 
@@ -2379,44 +2526,37 @@ class GamblingAnalyzer:
         return np.array(feature_matrix, dtype=np.float32)
 
     def _kmeans_clustering(self, X: 'np.ndarray', node_list: list) -> 'Optional[np.ndarray]':
-        """执行K-Means聚类并返回聚类标签"""
-        try:
-            from sklearn.cluster import KMeans
-            from sklearn.preprocessing import StandardScaler
-        except ImportError:
-            return None
+        """执行K-Means聚类并返回聚类标签（只依赖 numpy 的手写实现）。
 
+        2026-11-12 换掉 sklearn，理由写在 算法对照/双跑结果-2026-11-12.md，三条：
+        办案电脑不装东西的承诺、安全软件按文件名拦运行库、"用不了就换简易算法"这个
+        同一份账单两个答案的口径黑洞。**这一份是唯一路径**，没有第二套算法可退回：
+        聚不出来就是数据或代码出了问题，当场报错，不许打印一句警告改用简易办法糊过去。
+        """
         n_nodes = len(node_list)
         if n_nodes < 10:
-            return None
+            return None        # 人太少聚不出层，交给后面的规则判定（这是边界，不是备用算法）
 
-        try:
-            scaler = StandardScaler()
-            X_scaled = scaler.fit_transform(X)
+        X_scaled = _zscore(X)
 
-            # 自适应k值
-            if n_nodes >= 30:
-                k = 5
-            elif n_nodes >= 15:
-                k = 4
-            else:
-                k = 3
+        # 自适应k值（和换掉之前一模一样）
+        if n_nodes >= 30:
+            k = 5
+        elif n_nodes >= 15:
+            k = 4
+        else:
+            k = 3
 
-            km = KMeans(n_clusters=k, random_state=42, n_init=10, max_iter=300)
-            cluster_labels = km.fit_predict(X_scaled)
+        cluster_labels, 惯性 = _kmeans_numpy(X_scaled, k)     # 种子 42 / 10 次初始化 / 300 轮
+        self._kmeans_inertia = 惯性                           # 只给排查和成绩单看，不参与判定
 
-            # 将簇映射到层级
-            self._assign_levels_from_clusters(X, cluster_labels, node_list, k)
-            return cluster_labels
-
-        except Exception as e:
-            print(f"  ⚠️  K-Means 聚类失败（{e}），回退到规则判定")
-            return None
+        # 将簇映射到层级
+        self._assign_levels_from_clusters(X, cluster_labels, node_list, k)
+        return cluster_labels
 
     def _assign_levels_from_clusters(self, X: 'np.ndarray', cluster_labels: 'np.ndarray',
                                       node_list: list, k: int):
         """根据聚类结果分配层级"""
-        import numpy as np
         from collections import defaultdict
 
         cluster_nodes: dict = defaultdict(list)
@@ -2463,7 +2603,6 @@ class GamblingAnalyzer:
 
     def _compute_percentiles(self) -> dict:
         """计算全网流量百分位数"""
-        import numpy as np
         all_in_flows = np.array([info['in_flow'] for info in self.nodes.values()])
         all_out_degrees = np.array([int(info.get('out_degree', 0) or 0)
                                      for info in self.nodes.values()], dtype=float)
@@ -2488,7 +2627,6 @@ class GamblingAnalyzer:
     def _apply_rule_corrections(self, node_list: list, topo_depth: dict,
                                  percentiles: dict, cluster_labels: 'Optional[np.ndarray]'):
         """应用规则修正层级判定"""
-        import numpy as np
         max_depth = max(topo_depth.values(), default=0) or 1
 
         p = percentiles
@@ -2531,7 +2669,7 @@ class GamblingAnalyzer:
             self._validate_level1_agent(info, in_f, out_d, in_d, p)
 
             # 外围判定
-            if total < 1000 and in_d <= 1 and out_d <= 1:
+            if total < PERIPHERAL_MAX_TOTAL and in_d <= PERIPHERAL_MAX_RELATIONS and out_d <= PERIPHERAL_MAX_RELATIONS:
                 info['level'] = LEVEL_UNKNOWN
 
             # 记录调试信息
@@ -2545,9 +2683,9 @@ class GamblingAnalyzer:
         """赌客特征判定"""
         # 典型赌客：净流出为主 + 出度小 + 入度小
         gambler_flag = (
-            out_d <= 2 and
-            in_d <= 2 and
-            net_out_ratio > 0.2 and
+            out_d <= GAMBLER_MAX_OUTD and
+            in_d <= GAMBLER_MAX_IND and
+            net_out_ratio > GAMBLER_NET_OUT_RATIO_MIN and
             in_f < p['p80_in']
         )
         if gambler_flag and current_lv in (LEVEL_AGENT1, LEVEL_AGENT2, LEVEL_AGENT3, LEVEL_UNKNOWN):
@@ -2626,6 +2764,131 @@ class GamblingAnalyzer:
             if not changed:
                 break
 
+    def _compute_activity_windows(self):
+        """给每个账号补三个能回原表核对的事实数（不算判据，只是事实）：
+
+          · active_days  —— 这个账号有资金进出的自然日数（同一天转三笔只算一天）
+          · in_days      —— 收到钱的自然日数
+          · in_tx_count  —— 收到钱的笔数
+
+        日期解析不出来的账单（比如整张表时间列是空的）不能拿来卡人：
+        这种情况 days_usable 置 False，固定线复核自动不看天数，并在结果里写明。
+        """
+        for info in self.nodes.values():
+            info.setdefault('active_days', 0)
+            info.setdefault('in_days', 0)
+            info.setdefault('in_tx_count', 0)
+        self.days_usable = False
+        if not len(self.tx) or 'datetime_parsed' not in self.tx.columns:
+            return
+
+        tx = self.tx
+        drop = pd.Series(False, index=tx.index)
+        for flag in ('is_internal_transfer', 'is_self_transfer'):
+            if flag in tx.columns:
+                drop = drop | tx[flag].fillna(False).astype(bool)
+        if bool(drop.any()):
+            tx = tx[~drop]
+        if not len(tx):
+            return
+
+        days = pd.to_datetime(tx['datetime_parsed'], errors='coerce').dt.date
+        ok = days.notna()
+        if not bool(ok.any()):
+            return
+        days, tx = days[ok], tx[ok]
+        income = tx['is_income'] == True                                    # noqa: E712
+        src = tx['cp_key'].where(income, tx['owner_id']).astype(str)
+        dst = tx['owner_id'].where(income, tx['cp_key']).astype(str)
+
+        both = pd.concat([pd.DataFrame({'node': src, 'day': days}),
+                          pd.DataFrame({'node': dst, 'day': days})])
+        active = both.groupby('node')['day'].nunique()
+        recv = pd.DataFrame({'node': dst, 'day': days})
+        recv_days = recv.groupby('node')['day'].nunique()
+        recv_cnt = pd.DataFrame({'node': dst}).groupby('node').size()
+
+        for node, info in self.nodes.items():
+            key = str(node)
+            info['active_days'] = int(active.get(key, 0) or 0)
+            info['in_days'] = int(recv_days.get(key, 0) or 0)
+            info['in_tx_count'] = int(recv_cnt.get(key, 0) or 0)
+        self.days_usable = True
+
+    def _note_rule(self, node: str, label: str, before, after, **extra):
+        """把一条判定过程记进"适用规则"，让民警能回表核对。
+
+        分析机单独跑时没人听，什么都不做；带证据的适配器在场时它会建好 self.rules，
+        这里就顺手写进去（只有 add 一种动作，不改别人的结构）。
+        """
+        rules = getattr(self, 'rules', None)
+        if not isinstance(rules, dict):
+            return
+        entry = {'规则': label, '之前': before, '之后': after}
+        entry.update(extra)
+        rules.setdefault(node, []).append(entry)
+
+    def _apply_fixed_line_review(self):
+        """固定线复核：不看「跟本批人比排第几」，只看这个人自己的绝对量。
+
+        为什么要有这一步：原来的层级判定从头到尾比的是百分位（流入排本批前 5% 就点一级代理）。
+        账单里只有 30 个人时前 5% 就是一两个人，有 500 人时又是另一个数——
+        同一套代码，案子越小点出来的「代理嫌疑」越多。实测 100 个账号的卷子点 17 个代理嫌疑，
+        真代理只有 8 个，判出来的人里一半是错的。
+
+        所以最后拿四条绝对量再收一遍口。数值、出处、谁定的都在 case_packs/wangdu/03_门槛.csv：
+          · 代理：累计流入要到线；并且「给他转过钱的独立账号数够」或「累计流入到了大钱线」至少占一条
+          · 赌客：掏出去的钱要到线；并且往来不止一天
+        参数设成 0（或 1）就是不看那一条，留给人调。
+
+        被线卡住时不说「没问题」，只从代理/赌客降级回「待定外围」，
+        并把事实和哪条线没过写进「适用规则」，民警能回原表一行行核对。
+        """
+        level_names = {LEVEL_AGENT1: '一级代理嫌疑', LEVEL_AGENT2: '二级代理嫌疑',
+                       LEVEL_AGENT3: '三级代理嫌疑', LEVEL_GAMBLER: '赌客线索'}
+        days_usable = getattr(self, 'days_usable', False)
+
+        for node, info in self.nodes.items():
+            level = info.get('level', LEVEL_UNKNOWN)
+            if level not in level_names:
+                continue
+
+            reasons = []
+            in_f = float(info.get('in_flow', 0) or 0)
+            out_f = float(info.get('out_flow', 0) or 0)
+            in_d = int(info.get('in_degree', 0) or 0)
+
+            if level <= LEVEL_AGENT3:
+                if in_f < AGENT_MIN_INFLOW:
+                    reasons.append(f'累计流入{in_f:.2f}元，不到代理看线{AGENT_MIN_INFLOW:g}元')
+                if in_d < AGENT_MIN_IN_DEG and in_f < AGENT_BIG_INFLOW:
+                    reasons.append(f'只有{in_d}个账号给他转过钱（要求不少于{AGENT_MIN_IN_DEG:g}个），'
+                                   f'累计流入{in_f:.2f}元也没到大钱线{AGENT_BIG_INFLOW:g}元')
+                if AGENT_MIN_IN_DAYS > 1 and days_usable:
+                    if int(info.get('in_days', 0) or 0) < AGENT_MIN_IN_DAYS:
+                        reasons.append(f'收钱只出现在{int(info.get("in_days", 0) or 0)}天，'
+                                       f'要求不少于{AGENT_MIN_IN_DAYS:g}天')
+                if AGENT_MIN_OUT_DEG > 0:
+                    if int(info.get('out_degree', 0) or 0) < AGENT_MIN_OUT_DEG:
+                        reasons.append(f'一个下级转出对象都没有（要求不少于{AGENT_MIN_OUT_DEG:g}个）')
+            else:
+                if out_f < GAMBLER_MIN_OUTFLOW:
+                    reasons.append(f'累计流出{out_f:.2f}元，不到赌客看线{GAMBLER_MIN_OUTFLOW:g}元')
+                if GAMBLER_MIN_DAYS > 1 and days_usable:
+                    if int(info.get('active_days', 0) or 0) < GAMBLER_MIN_DAYS:
+                        reasons.append(f'只往来了{int(info.get("active_days", 0) or 0)}天，'
+                                       f'要求不少于{GAMBLER_MIN_DAYS:g}天')
+
+            if not reasons:
+                continue
+            info['level'] = LEVEL_UNKNOWN
+            info['fixed_line_hold'] = '；'.join(reasons)
+            self._note_rule(node,
+                            f'固定线复核：{level_names[level]}→待定外围'
+                            f'（累计流入{in_f:.2f}/累计流出{out_f:.2f}/'
+                            f'{in_d}个付款账号/{int(info.get("active_days", 0) or 0)}天往来）',
+                            level, LEVEL_UNKNOWN, 未过线原因=info['fixed_line_hold'])
+
     def _classify_levels(self):
         """
         层级判定 —— 赌球团伙金字塔结构（五级）
@@ -2649,6 +2912,9 @@ class GamblingAnalyzer:
         if not self.nodes:
             return
 
+        # 第零步：先算出每个账号的往来天数（固定线复核要用）
+        self._compute_activity_windows()
+
         # 第一步：计算拓扑深度
         topo_depth = self._compute_topo_depth()
 
@@ -2667,6 +2933,9 @@ class GamblingAnalyzer:
 
         # 第六步：拓扑一致性修正
         self._fix_topology_consistency()
+
+        # 第七步：固定线复核（前面全是「跟本批人比」的相对判定，这一步拿绝对量再筛一遍）
+        self._apply_fixed_line_review()
 
     def _detect_money_laundering(self):
         """
@@ -2740,7 +3009,7 @@ class GamblingAnalyzer:
                         (outcomes['datetime_parsed'] >= t0) &
                         (outcomes['datetime_parsed'] <= t1)
                     ]['amount_clean'].sum()
-                    if out_window >= inc_row['amount_clean'] * 0.7:
+                    if out_window >= inc_row['amount_clean'] * FAST_OUT_RATIO:
                         fast_transit.add(str(owner))
                         break
 
@@ -2795,14 +3064,14 @@ class GamblingAnalyzer:
 
             # D. 整数金额占比
             rr = float(round_ratio.get(nid, 0))
-            if rr >= 0.7 and total >= LEVEL2_MIN_INFLOW:
+            if rr >= ROUND_RATIO_MIN and total >= LEVEL2_MIN_INFLOW:
                 flags.append(f'整数金额占比高({rr:.0%}，疑似资金拆分)')
                 l_score += rr * 15
 
             # E. 上游高层→下游末端单线中转
             in_d  = int(info.get('in_degree', 0) or 0)
             out_d = int(info.get('out_degree', 0) or 0)
-            if in_d <= 2 and out_d <= 2 and in_f >= LEVEL2_MIN_INFLOW:
+            if in_d <= SINGLE_LINE_MAX_RELATIONS and out_d <= SINGLE_LINE_MAX_RELATIONS and in_f >= LEVEL2_MIN_INFLOW:
                 in_levels  = [self.nodes[n].get('level', LEVEL_UNKNOWN)
                               for n in G.predecessors(node) if n in self.nodes]
                 out_levels = [self.nodes[n].get('level', LEVEL_UNKNOWN)
@@ -4898,6 +5167,15 @@ class Visualizer:
 # ═══════════════════════════════════════════════════════════
 # 模块五：报告生成
 # ═══════════════════════════════════════════════════════════
+def _tag_spans(tags, style: str = "background:rgba(88,166,255,0.15);color:#58a6ff;padding:2px 6px;border-radius:10px;margin:1px") -> str:
+    """把标签渲染成小圆角方块，空标签返回空串。
+
+    2026-11-11 补：上午把 f-string 里的内联表达式提出来时只留下了调用、漏了这个函数，
+    导致网页报告里只要有人带标签就 NameError。原来内联写法见 git c7feacc 第 5243、5380 行。
+    """
+    return "  ".join(f"<span style='{style}'>{t}</span>" for t in tags) if tags else ""
+
+
 def generate_html_report(analyzer: GamblingAnalyzer,
                          viz: Visualizer,
                          suspect_df: pd.DataFrame) -> str:
@@ -5085,13 +5363,14 @@ def generate_html_report(analyzer: GamblingAnalyzer,
     </table>''' if broker_rows else '<p style="color:#8b949e">暂无数据</p>'
 
     # 高额关系对
+    _mutual_note = "<span style='color:#ff3b30'>互转⚠️</span>"
     pair_rows = ''.join(
         f'<tr><td>{i+1}</td>'
         f'<td><b>{p["a_name"]}</b> {_badge(p["a_level"])}</td>'
         f'<td style="text-align:center">{"⇄" if p["is_mutual"] else "→"}</td>'
         f'<td><b>{p["b_name"]}</b> {_badge(p["b_level"])}</td>'
         f'<td>¥{p["total_amount"]/10000:.1f}万</td>'
-        f'<td>{"<span style=\'color:#ff3b30\'>互转⚠️</span>" if p["is_mutual"] else ""}</td></tr>'
+        f'<td>{_mutual_note if p["is_mutual"] else ""}</td></tr>'
         for i, p in enumerate(key_data.get('top_pairs', []))
     )
     pair_html = f'''
@@ -5235,16 +5514,17 @@ def generate_html_report(analyzer: GamblingAnalyzer,
         ci    = comm_info['id']
         color = comm_info['color']
         size  = comm_info['size']
+        _seed_badge = "<span style='color:#ffd700;margin-left:5px'>🌱</span>"
         members = comm_info['members'][:20]  # 每社区最多展示20人
         member_rows = ''.join(
             f'<tr>'
             f'<td>{j+1}</td>'
             f'<td><b style="color:{color}">{m["name"]}</b>'
-            f'{"<span style=\'color:#ffd700;margin-left:5px\'>🌱</span>" if m["is_seed"] else ""}</td>'
+            f'{_seed_badge if m["is_seed"] else ""}</td>'
             f'<td>{_badge_g(m["level"])}</td>'
             f'<td>¥{m["total_flow"]/10000:.1f}万</td>'
             f'<td><span style="color:#ff6b6b;font-weight:700">{m["risk_score"]}</span></td>'
-            f'<td style="font-size:0.8em">{"  ".join(f"<span style=\'background:rgba(88,166,255,0.15);color:#58a6ff;padding:2px 6px;border-radius:10px;margin:1px\'>{t}</span>" for t in m["tags"]) if m["tags"] else ""}</td>'
+            f'<td style="font-size:0.8em">{_tag_spans(m["tags"]) if m["tags"] else ""}</td>'
             f'</tr>'
             for j, m in enumerate(members)
         )
@@ -5377,7 +5657,7 @@ def generate_html_report(analyzer: GamblingAnalyzer,
             f'<tr><td style="font-family:monospace;color:#8b949e;font-size:0.85em">'
             f'{analyzer.identity.resolve(acc)}</td>'
             f'<td style="font-family:monospace;font-size:0.8em;color:#c9d1d9">{acc}</td>'
-            f'<td>{"  ".join(f"<span style=\'background:rgba(88,166,255,0.15);color:#58a6ff;padding:2px 8px;border-radius:10px;margin:2px;display:inline-block\'>{t}</span>" for t in tags)}</td>'
+            f'<td>{_tag_spans(tags, style="background:rgba(88,166,255,0.15);color:#58a6ff;padding:2px 8px;border-radius:10px;margin:2px;display:inline-block")}</td>'
             f'</tr>'
             for acc, tags in sorted(all_tagged.items())
         )

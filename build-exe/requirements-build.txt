@@ -1,0 +1,16 @@
+# Build-machine only requirements (the police PC needs NOTHING installed).
+# Versions pinned to the Windows lock file. Do not bump casually.
+numpy==2.4.4
+pandas==3.0.2
+networkx==3.6.1
+plotly==6.7.0
+openpyxl==3.1.5
+xlrd==2.0.2
+# scikit-learn 摘掉了：层级判定改成 numpy 手写（langouste 12-12 提交 1373cb2 起，分析机和 mcp_server 都不 import 它）
+# 本机实测：把 sklearn 的 import 挡死，officer_app --自检 + 四个 smoke 全绿
+scipy==1.18.1
+python-dateutil==2.9.0.post0
+# chart drawing
+matplotlib
+# packaging tool, only needed on this build machine
+pyinstaller

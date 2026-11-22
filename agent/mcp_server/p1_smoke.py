@@ -3,10 +3,13 @@ import contextlib
 import copy
 import io
 import json
+import os
 import re
+import subprocess
 import sys
 from pathlib import Path
 import networkx as nx
+import numpy as np
 import pandas as pd
 from common import CACHE, DELIVERABLES, ga, folder
 from fixtures import generate
@@ -18,6 +21,8 @@ from report_check import check as report_check
 
 def main():
     output = []
+    output.append(check判据表缺失())
+    output.append(check聚类手写实现())
     capture = io.StringIO()
     with contextlib.redirect_stdout(capture):
         did = check(scan_dataset(str(generate())))['结论']['dataset_id']
@@ -34,11 +39,44 @@ def main():
         output.append('PASS 洗钱检测写回与旧算法等价，检测后排名失效')
         structure = check(scan_structure(did))
         assert len(structure['结论']['检测器状态']) == 7
-        failed = structure['结论']['检测器状态']['_detect_time_patterns']
-        assert failed['状态'] == '失败' and 'UnboundLocalError' in failed['原因']
-        assert structure['结论']['各检测器命中数']['_detect_time_patterns'] is None
+        # 这里原来写的是「_detect_time_patterns 必须以 UnboundLocalError 崩掉」——把老 numpy bug 当成了契约，
+        # bug 修好反而算自检失败。现在只提两句：① 七个检测器必须都跑完不许崩；
+        # ② 该命中的必须命中、这份样例里不该命中的必须报 0 命中。真命中的正例在下面另造一份流水验。
+        states = structure['结论']['检测器状态']
+        assert all(v['状态'] == '完成' for v in states.values()), states
+        hits = structure['结论']['各检测器命中数']
+        assert all(isinstance(v, int) for v in hits.values()), hits
+        assert hits['_detect_time_patterns'] == 0, hits       # 样例交易只跨两天，没有每周周期，必须报 0
+        assert hits['_detect_one_way_accounts'] > 0, hits     # 样例里确实有单向账户，不许悄悄漏成 0
         assert any('未提供数值置信度' in str(row['置信标注']) for row in structure['结论']['命中'])
-        output.append('PASS 七结构检测器全部调用，旧np错误显式失败而非0命中，未自造置信度')
+        # 正例：同一账号每 7 天进一笔差不多的钱，必须被抓成每周额度注入
+        probe = copy.deepcopy(ctx['analyzer'])
+        probe.nodes = {}                                      # 正例只验检测器本身，不污染真节点
+        probe._tx_original = pd.DataFrame([
+            {'owner_id': 'syn_weekly', 'cp_key': 'syn_upstream', 'amount_clean': 50000.0,
+             'datetime_parsed': pd.Timestamp('2026-01-%02d 10:00:00' % (7 * i + 1)),
+             'is_income': True, 'remark': '虚构额度注入', 'desc': ''} for i in range(4)])
+        with contextlib.redirect_stdout(sys.stderr):
+            weekly = probe._detect_time_patterns()
+        assert 'syn_weekly' in weekly and weekly['syn_weekly']['has_weekly_pattern'], weekly
+        output.append('PASS 七结构检测器全部跑完（不许崩），周注入正例命中、样例无误报，未自造置信度')
+        # 额度分配检测器：这份反面用例是 AMLSim 考场（2026-11-11）替我抓出来的——
+        # 老代码在函数里再 import numpy as np，分配笔数<=3 时那行 import 根本不执行，
+        # 走到 np.mean(intervals) 必崩 UnboundLocalError，整个结构检测这一路全废。
+        # 按新规矩只写两句：必须不崩；三个下级、每 7 天一笔这种正例必须命中。
+        probe = copy.deepcopy(ctx['analyzer'])
+        probe.nodes = {}
+        probe._tx_original = pd.DataFrame([
+            {'owner_id': 'syn_alloc', 'cp_key': f'syn_down{i}', 'amount_clean': 30000.0 + i,
+             'datetime_parsed': pd.Timestamp('2026-02-%02d 09:00:00' % (7 * i + 1)),
+             'is_income': False, 'remark': '', 'desc': ''} for i in range(3)])
+        with contextlib.redirect_stdout(sys.stderr):
+            alloc = probe._detect_credit_allocation()
+        assert 'syn_alloc' in alloc and alloc['syn_alloc']['has_periodic_pattern'], alloc
+        probe._tx_original = probe._tx_original.iloc[:2]
+        with contextlib.redirect_stdout(sys.stderr):
+            assert probe._detect_credit_allocation() == {}, '只发给两个下级，不该算额度分配'
+        output.append('PASS 额度分配检测器不崩（分配三笔这种少笔数用例）、三下级周分配命中、两下级不误报')
         rank = check(rank_suspects(did))
         assert rank['证据']['洗钱检测状态'] == '已检测'
         profile = check(profile_account(did, 'synthetic_receiver'))
@@ -142,6 +180,82 @@ def main():
     text = '\n'.join(output) + '\n'
     (DELIVERABLES / 'p1_output.txt').write_text(text, encoding='utf-8')
     print(text, end='')
+
+def check聚类手写实现():
+    """层级聚类换成 numpy 手写之后的契约（2026-11-12）。
+
+    换掉 sklearn 的理由在 算法对照/双跑结果-2026-11-12.md。按 AGENTS.md 新规矩，
+    这里只提四句"必须"，不拿任何惯性数值当契约：
+      ① 同一份数据跑两次标签必须一模一样（可复现是答辩要问的）；
+      ② 两堆明显分开的点必须各成一簇（聚不出来说明实现是死的）；
+      ③ 整列数一个样这种退化数据必须不崩、不出 NaN（以前 sklearn 那条路会打一句警告
+         然后"回退规则判定"，等于悄悄换了算法——现在这条路只有一条，崩了就是错）；
+      ④ 特征矩阵里混进 NaN/Inf 必须显式报错，不许聚出一版没人核对的层级。
+    最后一条是门：分析机 gambling_analysis.py 里再也不许出现 import sklearn。
+    """
+    两堆 = np.vstack([np.random.default_rng(1).normal(0.0, 1.0, (40, 3)),
+                      np.random.default_rng(2).normal(8.0, 1.0, (40, 3))])
+    标1, 惯1 = ga._kmeans_numpy(ga._zscore(两堆), 2)
+    标2, 惯2 = ga._kmeans_numpy(ga._zscore(两堆), 2)
+    assert (标1 == 标2).all() and 惯1 == 惯2, '同数据两次跑结果不同，种子没写死'
+    assert len(set(标1[:40].tolist())) == 1 and len(set(标1[40:].tolist())) == 1, '两堆点没各成一簇'
+    assert set(标1[:40].tolist()) != set(标1[40:].tolist()), '两堆被聚成一堆了'
+    常量列 = np.ones((20, 3))
+    标3, 惯3 = ga._kmeans_numpy(ga._zscore(常量列), 3)
+    assert not np.isnan(标3).any() and float(惯3) == 0.0, ('退化列没接住', 标3, 惯3)
+    try:
+        ga._kmeans_numpy(np.array([[1.0, float('nan')], [2.0, 3.0]]), 2)
+    except ValueError:
+        pass
+    else:
+        raise AssertionError('特征矩阵含 NaN 还让聚，必须显式报错')
+    源码 = Path(ga.__file__).read_text(encoding='utf-8')
+    assert 'import sklearn' not in 源码, '分析机里又出现 sklearn 了（打包那条路会重新变长）'
+    return 'PASS 手写聚类可复现、两堆分得开、退化列不崩、NaN显式报错，分析机里已无sklearn'
+
+
+# ── 判据表（案由包）找不到的验收 ────────────────────────────────────────────
+# 为什么有这一条：2026-11-12 main 查明 Windows 那个 exe「双击闪一下就没」的真凶，
+# 是 case_pack.py 在 import 的当口读表、表没打进包就当面色掉 FileNotFoundError。
+# 两句契约（按 AGENTS.md 新规矩：只提「必须不崩」「必须拦住」，不写具体数值）：
+#   ① 表找不到时 `import gambling_analysis` 退出码必须 0，并把原因记在 PACK_ERROR 里；
+#   ② 这时候真开分析机必须显式抛 CasePackError，不许拿空词表 + 0 门槛算一份成绩单出来。
+# 另加一句：那副顶空值的哑表读完常量就封上，之后再取值守卫必须报错——
+# 防的就是"悄悄用了一份默认数字"这种第二个「换简易算法」式口径黑洞。
+# 另起子进程跑：import 过的模块在本进程里没法重装，不能污染主链的 ga。
+判据表子代码 = (
+    'import os, sys\n'
+    'os.environ["FUNDFLOW_CASE_PACKS"] = sys.argv[1]\n'
+    'import gambling_analysis as ga\n'
+    'assert ga.PACK_ERROR, "表读不出来却没记下原因，PACK_ERROR 是空的"\n'
+    'try:\n'
+    '    ga.GamblingAnalyzer(None, None)\n'
+    'except ga.CasePackError:\n'
+    '    pass\n'
+    'else:\n'
+    '    raise SystemExit("表都读不出来还让开分析机，这里必须拦住")\n'
+    'try:\n'
+    '    ga.PACK.num("代理嫌疑累计流入下限")\n'
+    'except ga.CasePackError:\n'
+    '    pass\n'
+    'else:\n'
+    '    raise SystemExit("哑表没封上，还能拿 0 当门槛用")\n'
+    'print("判据表缺失已拦住")\n'
+)
+
+
+def check判据表缺失():
+    根 = Path(__file__).resolve().parents[2]
+    假目录 = str(根 / '__这份判据表根本不存在__')
+    环境 = dict(os.environ, FUNDFLOW_CASE_PACKS=假目录,
+                MPLCONFIGDIR=os.environ.get('MPLCONFIGDIR', '/tmp/mplcache'))
+    跑 = subprocess.run([sys.executable, '-X', 'utf8', '-c', 判据表子代码, 假目录],
+                        cwd=str(根), env=环境, capture_output=True, text=True, timeout=300)
+    assert 跑.returncode == 0, ('表缺失时 import 不该崩 / 该拦的没拦住', 跑.returncode,
+                               跑.stdout[-500:], 跑.stderr[-800:])
+    assert '判据表缺失已拦住' in 跑.stdout, 跑.stdout
+    return 'PASS 判据表找不到时import不崩、开分析机显式报错、空值哑表不许顶替真门槛'
+
 
 if __name__ == '__main__':
     if hasattr(sys.stdout, 'reconfigure'):

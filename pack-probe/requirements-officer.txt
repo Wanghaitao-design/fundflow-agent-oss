@@ -1,0 +1,13 @@
+# 民警版软件真正需要的东西，别的都不装
+# 版本号跟项目里 Windows 锁定的版本一致，避免装了不兼容的新版本
+pandas==3.0.2
+numpy==2.4.4
+networkx==3.6.1
+openpyxl==3.1.5
+xlrd==2.0.2
+plotly==6.7.0
+anyio
+# 画资金流向图要用。原 requirements.txt 漏了这一条，2026-11-11 补上
+matplotlib
+# 下面这个不是分析用的，是"把这套东西打成一个可执行文件"的工具，只在打包这台电脑上用
+pyinstaller

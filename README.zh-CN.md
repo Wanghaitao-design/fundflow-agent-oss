@@ -163,7 +163,7 @@
 |---|---|---|
 | **AGH 运行时** | 执行循环、事件账本、审批与沙箱、能力接口 | 负责任务执行、关键动作确认、过程留痕与扩展装配 |
 | **领域扩展层** | 3 个技能、11 个 MCP 工具、2 个治理钩子、领域知识库 | 把涉赌资金流研判的工序、规则、证据要求和验收标准装进智能体 |
-| **计算层** | stdio MCP 服务、`gambling_analysis.py`、pandas/numpy/scikit-learn/networkx | 承担统计、规则计算、图分析和路径搜索，结果可重复 |
+| **计算层** | stdio MCP 服务、`gambling_analysis.py`、pandas/numpy/networkx | 承担统计、规则计算、图分析和路径搜索，结果可重复 |
 | **数据与产物层** | 合成靶场、`agent/deliverables/<dataset_id>/`、验收脚本 | 生成合成场景，保存阶段产物，支持独立复核 |
 
 ### 3.2 核心模块

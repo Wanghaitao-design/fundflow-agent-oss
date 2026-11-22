@@ -7,9 +7,14 @@ import sys
 import threading
 from pathlib import Path
 
-PROJECT_ROOT = Path(__file__).resolve().parents[2]
-DELIVERABLES = PROJECT_ROOT / 'agent' / 'deliverables'
-sys.path.insert(0, str(PROJECT_ROOT))
+if getattr(sys, 'frozen', False):
+    # 打包成 exe 之后：源码目录是只读的打包产物，中间结果必须写到 exe 旁边
+    PROJECT_ROOT = Path(sys.executable).resolve().parent
+    DELIVERABLES = PROJECT_ROOT / '中间结果'
+else:
+    PROJECT_ROOT = Path(__file__).resolve().parents[2]
+    DELIVERABLES = PROJECT_ROOT / 'agent' / 'deliverables'
+    sys.path.insert(0, str(PROJECT_ROOT))
 with contextlib.redirect_stdout(sys.stderr):
     import gambling_analysis as ga
 

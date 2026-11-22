@@ -57,13 +57,34 @@ def main():
         assert '认定' not in text.replace('层级认定及依据', '') and '定罪' not in text
         passed('export_evidence：报告/排名/证据索引存在，输出限定deliverables，缺Trace显式标注')
         override = {k: 0 for k in ('p50_in', 'p70_in', 'p80_in', 'p90_in', 'p95_in', 'p99_in', 'p70_out_d', 'p80_out_d', 'p90_out_d', 'p80_in_d')}
-        changed = check(classify_tiers(did, override))
-        assert changed['证据']['参数']['p95_in'] == 0
+        agent_keys = ('一级代理嫌疑', '二级代理嫌疑', '三级代理嫌疑')
+        n_agent = lambda dist: sum(v for k, v in dist.items() if k in agent_keys)
+        # 契约一（不该变必须不变）：固定线（绝对量闸门）开着时，只压百分位**不许**改变层级分布。
+        # 绝对线排在相对排名之后、压过排名——这是 2026-11-11 加"固定线复核"时定死的设计，不是旋钮失灵。
+        gated = check(classify_tiers(did, override))
+        assert gated['证据']['参数']['p95_in'] == 0
         assert 'rank_result' not in ctx
-        assert tiers['结论']['层级分布'] != changed['结论']['层级分布']
+        assert gated['结论']['层级分布'] == tiers['结论']['层级分布'], (tiers['结论']['层级分布'], gated['结论']['层级分布'])
+        passed('固定线开着时只压百分位：层级分布必须不变（绝对线压过相对排名）')
+        # 契约二（该变必须变）：把固定线临时全填 0（＝退回老办法），百分位旋钮必须是活的——
+        # 默认参数必须判得出代理嫌疑，百分位全压到 0 必须判出**更多**。只断言方向，不写死人数。
+        frozen = {k: getattr(ga, k) for k in ('AGENT_MIN_INFLOW', 'AGENT_BIG_INFLOW', 'AGENT_MIN_IN_DEG',
+                                             'AGENT_MIN_IN_DAYS', 'AGENT_MIN_OUT_DEG', 'GAMBLER_MIN_OUTFLOW',
+                                             'GAMBLER_MIN_DAYS', 'MONEY_LAUNDER_MIN_FLOW', 'LEVEL2_MIN_INFLOW')}
+        try:
+            for key in frozen:
+                setattr(ga, key, 0)
+            off_default = check(classify_tiers(did))['结论']['层级分布']
+            off_override = check(classify_tiers(did, override))['结论']['层级分布']
+        finally:
+            for key, value in frozen.items():
+                setattr(ga, key, value)
+        assert n_agent(off_default) > 0, f'固定线全关时默认参数一个代理都判不出，这个 fixture 失效了：{off_default}'
+        assert n_agent(off_override) > n_agent(off_default), (off_default, off_override)
+        passed('固定线全关（＝老办法）：默认能判出代理，百分位压 0 判出更多（百分位旋钮是活的）')
         restored = check(classify_tiers(did))
         assert restored['结论'] == tiers['结论']
-        passed('阈值覆盖实际改变研判，排名缓存失效，恢复默认结果一致')
+        passed('恢复默认结果一致')
         invalid = classify_tiers(did, {'p95_in': -1})
         assert invalid['结论']['成功'] is False and invalid['异常']
         invalid_id = rank_suspects('invalid-id')

@@ -4,8 +4,9 @@ numpy==2.4.4
 pandas==3.0.2
 networkx==3.6.1
 plotly==6.7.0
+# 画资金流向图用（之前漏了，2026-11-11 补）
+matplotlib
 openpyxl==3.1.5
-scikit-learn==1.8.0
 threadpoolctl==3.6.0
 # Read legacy .xls bills; demo uses .xlsx.
 xlrd==2.0.2

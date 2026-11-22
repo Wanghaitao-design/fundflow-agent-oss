@@ -1,0 +1,6193 @@
+{
+  "parameters": {
+    "version": "default-v1-frozen-20261011",
+    "thresholds": {},
+    "frozen": true,
+    "protocol": "仅dev用于调参；冻结后holdout仅评测，不据结果回改参数；本期不调参，沿用旧自适应百分位默认"
+  },
+  "scenarios": [
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "split": "holdout",
+      "status": "部分",
+      "seconds": 3.3875,
+      "parameter_version": "default-v1-frozen-20261011",
+      "parameter_sha256": "ddf31b15298cee3e58b1dc50b0df9b2f9823d6be9566728c43ccd25efa294243",
+      "accounts": 100,
+      "failure_count": 2,
+      "tier_valid": 95,
+      "tier_correct": 89,
+      "laundering_valid": 100,
+      "TN": 93,
+      "FP": 5,
+      "TP": 2,
+      "tier_failed": 0,
+      "laundering_failed": 0,
+      "FN": 0,
+      "tier_accuracy": 0.9368421052631579,
+      "laundering_recall": 1.0,
+      "false_positive_rate": 0.05102040816326531,
+      "tier_confusion": [
+        {
+          "true": "一级代理嫌疑",
+          "predicted": "二级代理嫌疑",
+          "count": 1
+        },
+        {
+          "true": "三级代理嫌疑",
+          "predicted": "三级代理嫌疑",
+          "count": 5
+        },
+        {
+          "true": "二级代理嫌疑",
+          "predicted": "二级代理嫌疑",
+          "count": 2
+        },
+        {
+          "true": "待定外围",
+          "predicted": "待定外围",
+          "count": 20
+        },
+        {
+          "true": "赌客线索",
+          "predicted": "三级代理嫌疑",
+          "count": 5
+        },
+        {
+          "true": "赌客线索",
+          "predicted": "赌客线索",
+          "count": 62
+        }
+      ],
+      "failures": [
+        {
+          "stage": "scan_dataset",
+          "文件": "/home/wht/orca/fundflow-agent-oss/agent/deliverables/range/s100_noise_missing_holdout/dataset/syn_broken.xlsx",
+          "状态": "失败",
+          "原因": "无法解析文件格式: /home/wht/orca/fundflow-agent-oss/agent/deliverables/range/s100_noise_missing_holdout/dataset/syn_broken.xlsx"
+        },
+        {
+          "stage": "scan_dataset",
+          "文件": "/home/wht/orca/fundflow-agent-oss/agent/deliverables/range/s100_noise_missing_holdout/dataset/syn_missing_微信.xlsx",
+          "状态": "失败",
+          "原因": "缺少时间或金额关键列"
+        }
+      ],
+      "by_role": {
+        "一级代理嫌疑": {
+          "tier_valid": 1,
+          "tier_correct": 0,
+          "laundering_valid": 1,
+          "TN": 1,
+          "tier_failed": 0,
+          "laundering_failed": 0,
+          "TP": 0,
+          "FN": 0,
+          "FP": 0,
+          "tier_accuracy": 0.0,
+          "laundering_recall": "不适用",
+          "false_positive_rate": 0.0,
+          "tier_confusion": [
+            {
+              "true": "一级代理嫌疑",
+              "predicted": "二级代理嫌疑",
+              "count": 1
+            }
+          ]
+        },
+        "三级代理嫌疑": {
+          "tier_valid": 5,
+          "tier_correct": 5,
+          "laundering_valid": 5,
+          "FP": 5,
+          "tier_failed": 0,
+          "laundering_failed": 0,
+          "TP": 0,
+          "FN": 0,
+          "TN": 0,
+          "tier_accuracy": 1.0,
+          "laundering_recall": "不适用",
+          "false_positive_rate": 1.0,
+          "tier_confusion": [
+            {
+              "true": "三级代理嫌疑",
+              "predicted": "三级代理嫌疑",
+              "count": 5
+            }
+          ]
+        },
+        "二级代理嫌疑": {
+          "tier_valid": 2,
+          "tier_correct": 2,
+          "laundering_valid": 2,
+          "TN": 2,
+          "tier_failed": 0,
+          "laundering_failed": 0,
+          "TP": 0,
+          "FN": 0,
+          "FP": 0,
+          "tier_accuracy": 1.0,
+          "laundering_recall": "不适用",
+          "false_positive_rate": 0.0,
+          "tier_confusion": [
+            {
+              "true": "二级代理嫌疑",
+              "predicted": "二级代理嫌疑",
+              "count": 2
+            }
+          ]
+        },
+        "做账/代收付线索": {
+          "laundering_valid": 1,
+          "TN": 1,
+          "tier_valid": 0,
+          "tier_correct": 0,
+          "tier_failed": 0,
+          "laundering_failed": 0,
+          "TP": 0,
+          "FN": 0,
+          "FP": 0,
+          "tier_accuracy": "不适用",
+          "laundering_recall": "不适用",
+          "false_positive_rate": 0.0,
+          "tier_confusion": []
+        },
+        "平台内转账噪音": {
+          "laundering_valid": 1,
+          "TN": 1,
+          "tier_valid": 0,
+          "tier_correct": 0,
+          "tier_failed": 0,
+          "laundering_failed": 0,
+          "TP": 0,
+          "FN": 0,
+          "FP": 0,
+          "tier_accuracy": "不适用",
+          "laundering_recall": "不适用",
+          "false_positive_rate": 0.0,
+          "tier_confusion": []
+        },
+        "归集转出线索": {
+          "laundering_valid": 1,
+          "TN": 1,
+          "tier_valid": 0,
+          "tier_correct": 0,
+          "tier_failed": 0,
+          "laundering_failed": 0,
+          "TP": 0,
+          "FN": 0,
+          "FP": 0,
+          "tier_accuracy": "不适用",
+          "laundering_recall": "不适用",
+          "false_positive_rate": 0.0,
+          "tier_confusion": []
+        },
+        "待定外围": {
+          "tier_valid": 20,
+          "tier_correct": 20,
+          "laundering_valid": 20,
+          "TN": 20,
+          "tier_failed": 0,
+          "laundering_failed": 0,
+          "TP": 0,
+          "FN": 0,
+          "FP": 0,
+          "tier_accuracy": 1.0,
+          "laundering_recall": "不适用",
+          "false_positive_rate": 0.0,
+          "tier_confusion": [
+            {
+              "true": "待定外围",
+              "predicted": "待定外围",
+              "count": 20
+            }
+          ]
+        },
+        "赌客线索": {
+          "tier_valid": 67,
+          "tier_correct": 62,
+          "laundering_valid": 67,
+          "TN": 67,
+          "tier_failed": 0,
+          "laundering_failed": 0,
+          "TP": 0,
+          "FN": 0,
+          "FP": 0,
+          "tier_accuracy": 0.9253731343283582,
+          "laundering_recall": "不适用",
+          "false_positive_rate": 0.0,
+          "tier_confusion": [
+            {
+              "true": "赌客线索",
+              "predicted": "三级代理嫌疑",
+              "count": 5
+            },
+            {
+              "true": "赌客线索",
+              "predicted": "赌客线索",
+              "count": 62
+            }
+          ]
+        },
+        "跑分线索": {
+          "laundering_valid": 1,
+          "TP": 1,
+          "tier_valid": 0,
+          "tier_correct": 0,
+          "tier_failed": 0,
+          "laundering_failed": 0,
+          "FN": 0,
+          "FP": 0,
+          "TN": 0,
+          "tier_accuracy": "不适用",
+          "laundering_recall": 1.0,
+          "false_positive_rate": "不适用",
+          "tier_confusion": []
+        },
+        "过路/水房线索": {
+          "laundering_valid": 1,
+          "TP": 1,
+          "tier_valid": 0,
+          "tier_correct": 0,
+          "tier_failed": 0,
+          "laundering_failed": 0,
+          "FN": 0,
+          "FP": 0,
+          "TN": 0,
+          "tier_accuracy": "不适用",
+          "laundering_recall": 1.0,
+          "false_positive_rate": "不适用",
+          "tier_confusion": []
+        }
+      },
+      "tool_artifacts": {
+        "scan_dataset": {
+          "完整结果": "/home/wht/orca/fundflow-agent-oss/agent/deliverables/68385aa3c19e40208abf5ab2ac3056a4/01_intake.json"
+        },
+        "build_fund_graph": {
+          "标准交易表": "/home/wht/orca/fundflow-agent-oss/agent/deliverables/68385aa3c19e40208abf5ab2ac3056a4/02_cleaned.csv",
+          "完整结果": "/home/wht/orca/fundflow-agent-oss/agent/deliverables/68385aa3c19e40208abf5ab2ac3056a4/04_graph_stats.json"
+        },
+        "classify_tiers": {
+          "层级表": "/home/wht/orca/fundflow-agent-oss/agent/deliverables/68385aa3c19e40208abf5ab2ac3056a4/05_tiers.csv",
+          "完整结果": "/home/wht/orca/fundflow-agent-oss/agent/deliverables/68385aa3c19e40208abf5ab2ac3056a4/05_tiers.json"
+        },
+        "detect_laundering": {
+          "洗钱表": "/home/wht/orca/fundflow-agent-oss/agent/deliverables/68385aa3c19e40208abf5ab2ac3056a4/05_laundering.csv",
+          "完整结果": "/home/wht/orca/fundflow-agent-oss/agent/deliverables/68385aa3c19e40208abf5ab2ac3056a4/05_laundering.json"
+        },
+        "scan_structure": {
+          "结构表": "/home/wht/orca/fundflow-agent-oss/agent/deliverables/68385aa3c19e40208abf5ab2ac3056a4/05_structure.csv",
+          "完整结果": "/home/wht/orca/fundflow-agent-oss/agent/deliverables/68385aa3c19e40208abf5ab2ac3056a4/05_structure.json"
+        },
+        "rank_suspects": {
+          "排名表": "/home/wht/orca/fundflow-agent-oss/agent/deliverables/68385aa3c19e40208abf5ab2ac3056a4/05_ranking.csv",
+          "完整结果": "/home/wht/orca/fundflow-agent-oss/agent/deliverables/68385aa3c19e40208abf5ab2ac3056a4/05_ranking.json"
+        }
+      }
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "split": "holdout",
+      "status": "完整",
+      "seconds": 14.4311,
+      "parameter_version": "default-v1-frozen-20261011",
+      "parameter_sha256": "ddf31b15298cee3e58b1dc50b0df9b2f9823d6be9566728c43ccd25efa294243",
+      "accounts": 500,
+      "failure_count": 0,
+      "tier_valid": 495,
+      "tier_correct": 486,
+      "laundering_valid": 500,
+      "TN": 473,
+      "FP": 25,
+      "TP": 2,
+      "tier_failed": 0,
+      "laundering_failed": 0,
+      "FN": 0,
+      "tier_accuracy": 0.9818181818181818,
+      "laundering_recall": 1.0,
+      "false_positive_rate": 0.050200803212851405,
+      "tier_confusion": [
+        {
+          "true": "一级代理嫌疑",
+          "predicted": "二级代理嫌疑",
+          "count": 1
+        },
+        {
+          "true": "三级代理嫌疑",
+          "predicted": "三级代理嫌疑",
+          "count": 25
+        },
+        {
+          "true": "二级代理嫌疑",
+          "predicted": "一级代理嫌疑",
+          "count": 5
+        },
+        {
+          "true": "二级代理嫌疑",
+          "predicted": "二级代理嫌疑",
+          "count": 5
+        },
+        {
+          "true": "赌客线索",
+          "predicted": "三级代理嫌疑",
+          "count": 3
+        },
+        {
+          "true": "赌客线索",
+          "predicted": "赌客线索",
+          "count": 456
+        }
+      ],
+      "failures": [],
+      "by_role": {
+        "一级代理嫌疑": {
+          "tier_valid": 1,
+          "tier_correct": 0,
+          "laundering_valid": 1,
+          "TN": 1,
+          "tier_failed": 0,
+          "laundering_failed": 0,
+          "TP": 0,
+          "FN": 0,
+          "FP": 0,
+          "tier_accuracy": 0.0,
+          "laundering_recall": "不适用",
+          "false_positive_rate": 0.0,
+          "tier_confusion": [
+            {
+              "true": "一级代理嫌疑",
+              "predicted": "二级代理嫌疑",
+              "count": 1
+            }
+          ]
+        },
+        "三级代理嫌疑": {
+          "tier_valid": 25,
+          "tier_correct": 25,
+          "laundering_valid": 25,
+          "FP": 25,
+          "tier_failed": 0,
+          "laundering_failed": 0,
+          "TP": 0,
+          "FN": 0,
+          "TN": 0,
+          "tier_accuracy": 1.0,
+          "laundering_recall": "不适用",
+          "false_positive_rate": 1.0,
+          "tier_confusion": [
+            {
+              "true": "三级代理嫌疑",
+              "predicted": "三级代理嫌疑",
+              "count": 25
+            }
+          ]
+        },
+        "二级代理嫌疑": {
+          "tier_valid": 10,
+          "tier_correct": 5,
+          "laundering_valid": 10,
+          "TN": 10,
+          "tier_failed": 0,
+          "laundering_failed": 0,
+          "TP": 0,
+          "FN": 0,
+          "FP": 0,
+          "tier_accuracy": 0.5,
+          "laundering_recall": "不适用",
+          "false_positive_rate": 0.0,
+          "tier_confusion": [
+            {
+              "true": "二级代理嫌疑",
+              "predicted": "一级代理嫌疑",
+              "count": 5
+            },
+            {
+              "true": "二级代理嫌疑",
+              "predicted": "二级代理嫌疑",
+              "count": 5
+            }
+          ]
+        },
+        "做账/代收付线索": {
+          "laundering_valid": 1,
+          "TN": 1,
+          "tier_valid": 0,
+          "tier_correct": 0,
+          "tier_failed": 0,
+          "laundering_failed": 0,
+          "TP": 0,
+          "FN": 0,
+          "FP": 0,
+          "tier_accuracy": "不适用",
+          "laundering_recall": "不适用",
+          "false_positive_rate": 0.0,
+          "tier_confusion": []
+        },
+        "平台内转账噪音": {
+          "laundering_valid": 1,
+          "TN": 1,
+          "tier_valid": 0,
+          "tier_correct": 0,
+          "tier_failed": 0,
+          "laundering_failed": 0,
+          "TP": 0,
+          "FN": 0,
+          "FP": 0,
+          "tier_accuracy": "不适用",
+          "laundering_recall": "不适用",
+          "false_positive_rate": 0.0,
+          "tier_confusion": []
+        },
+        "归集转出线索": {
+          "laundering_valid": 1,
+          "TN": 1,
+          "tier_valid": 0,
+          "tier_correct": 0,
+          "tier_failed": 0,
+          "laundering_failed": 0,
+          "TP": 0,
+          "FN": 0,
+          "FP": 0,
+          "tier_accuracy": "不适用",
+          "laundering_recall": "不适用",
+          "false_positive_rate": 0.0,
+          "tier_confusion": []
+        },
+        "赌客线索": {
+          "tier_valid": 459,
+          "tier_correct": 456,
+          "laundering_valid": 459,
+          "TN": 459,
+          "tier_failed": 0,
+          "laundering_failed": 0,
+          "TP": 0,
+          "FN": 0,
+          "FP": 0,
+          "tier_accuracy": 0.9934640522875817,
+          "laundering_recall": "不适用",
+          "false_positive_rate": 0.0,
+          "tier_confusion": [
+            {
+              "true": "赌客线索",
+              "predicted": "三级代理嫌疑",
+              "count": 3
+            },
+            {
+              "true": "赌客线索",
+              "predicted": "赌客线索",
+              "count": 456
+            }
+          ]
+        },
+        "跑分线索": {
+          "laundering_valid": 1,
+          "TP": 1,
+          "tier_valid": 0,
+          "tier_correct": 0,
+          "tier_failed": 0,
+          "laundering_failed": 0,
+          "FN": 0,
+          "FP": 0,
+          "TN": 0,
+          "tier_accuracy": "不适用",
+          "laundering_recall": 1.0,
+          "false_positive_rate": "不适用",
+          "tier_confusion": []
+        },
+        "过路/水房线索": {
+          "laundering_valid": 1,
+          "TP": 1,
+          "tier_valid": 0,
+          "tier_correct": 0,
+          "tier_failed": 0,
+          "laundering_failed": 0,
+          "FN": 0,
+          "FP": 0,
+          "TN": 0,
+          "tier_accuracy": "不适用",
+          "laundering_recall": 1.0,
+          "false_positive_rate": "不适用",
+          "tier_confusion": []
+        }
+      },
+      "tool_artifacts": {
+        "scan_dataset": {
+          "完整结果": "/home/wht/orca/fundflow-agent-oss/agent/deliverables/1928dd1675ea4a0eb40e10c39b322d21/01_intake.json"
+        },
+        "build_fund_graph": {
+          "标准交易表": "/home/wht/orca/fundflow-agent-oss/agent/deliverables/1928dd1675ea4a0eb40e10c39b322d21/02_cleaned.csv",
+          "完整结果": "/home/wht/orca/fundflow-agent-oss/agent/deliverables/1928dd1675ea4a0eb40e10c39b322d21/04_graph_stats.json"
+        },
+        "classify_tiers": {
+          "层级表": "/home/wht/orca/fundflow-agent-oss/agent/deliverables/1928dd1675ea4a0eb40e10c39b322d21/05_tiers.csv",
+          "完整结果": "/home/wht/orca/fundflow-agent-oss/agent/deliverables/1928dd1675ea4a0eb40e10c39b322d21/05_tiers.json"
+        },
+        "detect_laundering": {
+          "洗钱表": "/home/wht/orca/fundflow-agent-oss/agent/deliverables/1928dd1675ea4a0eb40e10c39b322d21/05_laundering.csv",
+          "完整结果": "/home/wht/orca/fundflow-agent-oss/agent/deliverables/1928dd1675ea4a0eb40e10c39b322d21/05_laundering.json"
+        },
+        "scan_structure": {
+          "结构表": "/home/wht/orca/fundflow-agent-oss/agent/deliverables/1928dd1675ea4a0eb40e10c39b322d21/05_structure.csv",
+          "完整结果": "/home/wht/orca/fundflow-agent-oss/agent/deliverables/1928dd1675ea4a0eb40e10c39b322d21/05_structure.json"
+        },
+        "rank_suspects": {
+          "排名表": "/home/wht/orca/fundflow-agent-oss/agent/deliverables/1928dd1675ea4a0eb40e10c39b322d21/05_ranking.csv",
+          "完整结果": "/home/wht/orca/fundflow-agent-oss/agent/deliverables/1928dd1675ea4a0eb40e10c39b322d21/05_ranking.json"
+        }
+      }
+    }
+  ],
+  "total": {
+    "scenario": "汇总",
+    "split": "holdout",
+    "status": "部分",
+    "seconds": 17.8186,
+    "parameter_version": "default-v1-frozen-20261011",
+    "accounts": 600,
+    "failure_count": 2,
+    "tier_valid": 590,
+    "tier_correct": 575,
+    "laundering_valid": 600,
+    "TN": 566,
+    "FP": 30,
+    "TP": 4,
+    "tier_failed": 0,
+    "laundering_failed": 0,
+    "FN": 0,
+    "tier_accuracy": 0.9745762711864406,
+    "laundering_recall": 1.0,
+    "false_positive_rate": 0.050335570469798654,
+    "tier_confusion": [
+      {
+        "true": "一级代理嫌疑",
+        "predicted": "二级代理嫌疑",
+        "count": 2
+      },
+      {
+        "true": "三级代理嫌疑",
+        "predicted": "三级代理嫌疑",
+        "count": 30
+      },
+      {
+        "true": "二级代理嫌疑",
+        "predicted": "一级代理嫌疑",
+        "count": 5
+      },
+      {
+        "true": "二级代理嫌疑",
+        "predicted": "二级代理嫌疑",
+        "count": 7
+      },
+      {
+        "true": "待定外围",
+        "predicted": "待定外围",
+        "count": 20
+      },
+      {
+        "true": "赌客线索",
+        "predicted": "三级代理嫌疑",
+        "count": 8
+      },
+      {
+        "true": "赌客线索",
+        "predicted": "赌客线索",
+        "count": 518
+      }
+    ]
+  },
+  "by_role": {
+    "一级代理嫌疑": {
+      "tier_valid": 2,
+      "tier_correct": 0,
+      "laundering_valid": 2,
+      "TN": 2,
+      "tier_failed": 0,
+      "laundering_failed": 0,
+      "TP": 0,
+      "FN": 0,
+      "FP": 0,
+      "tier_accuracy": 0.0,
+      "laundering_recall": "不适用",
+      "false_positive_rate": 0.0,
+      "tier_confusion": [
+        {
+          "true": "一级代理嫌疑",
+          "predicted": "二级代理嫌疑",
+          "count": 2
+        }
+      ]
+    },
+    "三级代理嫌疑": {
+      "tier_valid": 30,
+      "tier_correct": 30,
+      "laundering_valid": 30,
+      "FP": 30,
+      "tier_failed": 0,
+      "laundering_failed": 0,
+      "TP": 0,
+      "FN": 0,
+      "TN": 0,
+      "tier_accuracy": 1.0,
+      "laundering_recall": "不适用",
+      "false_positive_rate": 1.0,
+      "tier_confusion": [
+        {
+          "true": "三级代理嫌疑",
+          "predicted": "三级代理嫌疑",
+          "count": 30
+        }
+      ]
+    },
+    "二级代理嫌疑": {
+      "tier_valid": 12,
+      "tier_correct": 7,
+      "laundering_valid": 12,
+      "TN": 12,
+      "tier_failed": 0,
+      "laundering_failed": 0,
+      "TP": 0,
+      "FN": 0,
+      "FP": 0,
+      "tier_accuracy": 0.5833333333333334,
+      "laundering_recall": "不适用",
+      "false_positive_rate": 0.0,
+      "tier_confusion": [
+        {
+          "true": "二级代理嫌疑",
+          "predicted": "一级代理嫌疑",
+          "count": 5
+        },
+        {
+          "true": "二级代理嫌疑",
+          "predicted": "二级代理嫌疑",
+          "count": 7
+        }
+      ]
+    },
+    "做账/代收付线索": {
+      "laundering_valid": 2,
+      "TN": 2,
+      "tier_valid": 0,
+      "tier_correct": 0,
+      "tier_failed": 0,
+      "laundering_failed": 0,
+      "TP": 0,
+      "FN": 0,
+      "FP": 0,
+      "tier_accuracy": "不适用",
+      "laundering_recall": "不适用",
+      "false_positive_rate": 0.0,
+      "tier_confusion": []
+    },
+    "平台内转账噪音": {
+      "laundering_valid": 2,
+      "TN": 2,
+      "tier_valid": 0,
+      "tier_correct": 0,
+      "tier_failed": 0,
+      "laundering_failed": 0,
+      "TP": 0,
+      "FN": 0,
+      "FP": 0,
+      "tier_accuracy": "不适用",
+      "laundering_recall": "不适用",
+      "false_positive_rate": 0.0,
+      "tier_confusion": []
+    },
+    "归集转出线索": {
+      "laundering_valid": 2,
+      "TN": 2,
+      "tier_valid": 0,
+      "tier_correct": 0,
+      "tier_failed": 0,
+      "laundering_failed": 0,
+      "TP": 0,
+      "FN": 0,
+      "FP": 0,
+      "tier_accuracy": "不适用",
+      "laundering_recall": "不适用",
+      "false_positive_rate": 0.0,
+      "tier_confusion": []
+    },
+    "待定外围": {
+      "tier_valid": 20,
+      "tier_correct": 20,
+      "laundering_valid": 20,
+      "TN": 20,
+      "tier_failed": 0,
+      "laundering_failed": 0,
+      "TP": 0,
+      "FN": 0,
+      "FP": 0,
+      "tier_accuracy": 1.0,
+      "laundering_recall": "不适用",
+      "false_positive_rate": 0.0,
+      "tier_confusion": [
+        {
+          "true": "待定外围",
+          "predicted": "待定外围",
+          "count": 20
+        }
+      ]
+    },
+    "赌客线索": {
+      "tier_valid": 526,
+      "tier_correct": 518,
+      "laundering_valid": 526,
+      "TN": 526,
+      "tier_failed": 0,
+      "laundering_failed": 0,
+      "TP": 0,
+      "FN": 0,
+      "FP": 0,
+      "tier_accuracy": 0.9847908745247148,
+      "laundering_recall": "不适用",
+      "false_positive_rate": 0.0,
+      "tier_confusion": [
+        {
+          "true": "赌客线索",
+          "predicted": "三级代理嫌疑",
+          "count": 8
+        },
+        {
+          "true": "赌客线索",
+          "predicted": "赌客线索",
+          "count": 518
+        }
+      ]
+    },
+    "跑分线索": {
+      "laundering_valid": 2,
+      "TP": 2,
+      "tier_valid": 0,
+      "tier_correct": 0,
+      "tier_failed": 0,
+      "laundering_failed": 0,
+      "FN": 0,
+      "FP": 0,
+      "TN": 0,
+      "tier_accuracy": "不适用",
+      "laundering_recall": 1.0,
+      "false_positive_rate": "不适用",
+      "tier_confusion": []
+    },
+    "过路/水房线索": {
+      "laundering_valid": 2,
+      "TP": 2,
+      "tier_valid": 0,
+      "tier_correct": 0,
+      "tier_failed": 0,
+      "laundering_failed": 0,
+      "FN": 0,
+      "FP": 0,
+      "TN": 0,
+      "tier_accuracy": "不适用",
+      "laundering_recall": 1.0,
+      "false_positive_rate": "不适用",
+      "tier_confusion": []
+    }
+  },
+  "samples": [
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0000",
+      "role": "一级代理嫌疑",
+      "true_tier": "一级代理嫌疑",
+      "pred_tier": "二级代理嫌疑",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0001",
+      "role": "二级代理嫌疑",
+      "true_tier": "二级代理嫌疑",
+      "pred_tier": "二级代理嫌疑",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0002",
+      "role": "二级代理嫌疑",
+      "true_tier": "二级代理嫌疑",
+      "pred_tier": "二级代理嫌疑",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0003",
+      "role": "三级代理嫌疑",
+      "true_tier": "三级代理嫌疑",
+      "pred_tier": "三级代理嫌疑",
+      "true_laundering": false,
+      "pred_laundering": true
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0004",
+      "role": "三级代理嫌疑",
+      "true_tier": "三级代理嫌疑",
+      "pred_tier": "三级代理嫌疑",
+      "true_laundering": false,
+      "pred_laundering": true
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0005",
+      "role": "三级代理嫌疑",
+      "true_tier": "三级代理嫌疑",
+      "pred_tier": "三级代理嫌疑",
+      "true_laundering": false,
+      "pred_laundering": true
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0006",
+      "role": "三级代理嫌疑",
+      "true_tier": "三级代理嫌疑",
+      "pred_tier": "三级代理嫌疑",
+      "true_laundering": false,
+      "pred_laundering": true
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0007",
+      "role": "三级代理嫌疑",
+      "true_tier": "三级代理嫌疑",
+      "pred_tier": "三级代理嫌疑",
+      "true_laundering": false,
+      "pred_laundering": true
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0008",
+      "role": "归集转出线索",
+      "true_tier": null,
+      "pred_tier": "二级代理嫌疑",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0009",
+      "role": "做账/代收付线索",
+      "true_tier": null,
+      "pred_tier": "二级代理嫌疑",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0010",
+      "role": "过路/水房线索",
+      "true_tier": null,
+      "pred_tier": "二级代理嫌疑",
+      "true_laundering": true,
+      "pred_laundering": true
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0011",
+      "role": "跑分线索",
+      "true_tier": null,
+      "pred_tier": "二级代理嫌疑",
+      "true_laundering": true,
+      "pred_laundering": true
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0012",
+      "role": "平台内转账噪音",
+      "true_tier": null,
+      "pred_tier": "待定外围",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0013",
+      "role": "待定外围",
+      "true_tier": "待定外围",
+      "pred_tier": "待定外围",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0014",
+      "role": "待定外围",
+      "true_tier": "待定外围",
+      "pred_tier": "待定外围",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0015",
+      "role": "待定外围",
+      "true_tier": "待定外围",
+      "pred_tier": "待定外围",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0016",
+      "role": "待定外围",
+      "true_tier": "待定外围",
+      "pred_tier": "待定外围",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0017",
+      "role": "待定外围",
+      "true_tier": "待定外围",
+      "pred_tier": "待定外围",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0018",
+      "role": "待定外围",
+      "true_tier": "待定外围",
+      "pred_tier": "待定外围",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0019",
+      "role": "待定外围",
+      "true_tier": "待定外围",
+      "pred_tier": "待定外围",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0020",
+      "role": "待定外围",
+      "true_tier": "待定外围",
+      "pred_tier": "待定外围",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0021",
+      "role": "待定外围",
+      "true_tier": "待定外围",
+      "pred_tier": "待定外围",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0022",
+      "role": "待定外围",
+      "true_tier": "待定外围",
+      "pred_tier": "待定外围",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0023",
+      "role": "待定外围",
+      "true_tier": "待定外围",
+      "pred_tier": "待定外围",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0024",
+      "role": "待定外围",
+      "true_tier": "待定外围",
+      "pred_tier": "待定外围",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0025",
+      "role": "待定外围",
+      "true_tier": "待定外围",
+      "pred_tier": "待定外围",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0026",
+      "role": "待定外围",
+      "true_tier": "待定外围",
+      "pred_tier": "待定外围",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0027",
+      "role": "待定外围",
+      "true_tier": "待定外围",
+      "pred_tier": "待定外围",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0028",
+      "role": "待定外围",
+      "true_tier": "待定外围",
+      "pred_tier": "待定外围",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0029",
+      "role": "待定外围",
+      "true_tier": "待定外围",
+      "pred_tier": "待定外围",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0030",
+      "role": "待定外围",
+      "true_tier": "待定外围",
+      "pred_tier": "待定外围",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0031",
+      "role": "待定外围",
+      "true_tier": "待定外围",
+      "pred_tier": "待定外围",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0032",
+      "role": "待定外围",
+      "true_tier": "待定外围",
+      "pred_tier": "待定外围",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0033",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "三级代理嫌疑",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0034",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "三级代理嫌疑",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0035",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "三级代理嫌疑",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0036",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "三级代理嫌疑",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0037",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "三级代理嫌疑",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0038",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0039",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0040",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0041",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0042",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0043",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0044",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0045",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0046",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0047",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0048",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0049",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0050",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0051",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0052",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0053",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0054",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0055",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0056",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0057",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0058",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0059",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0060",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0061",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0062",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0063",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0064",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0065",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0066",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0067",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0068",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0069",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0070",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0071",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0072",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0073",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0074",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0075",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0076",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0077",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0078",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0079",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0080",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0081",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0082",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0083",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0084",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0085",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0086",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0087",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0088",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0089",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0090",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0091",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0092",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0093",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0094",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0095",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0096",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0097",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0098",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s100_noise_missing_holdout",
+      "account": "syn0099",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0000",
+      "role": "一级代理嫌疑",
+      "true_tier": "一级代理嫌疑",
+      "pred_tier": "二级代理嫌疑",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0001",
+      "role": "二级代理嫌疑",
+      "true_tier": "二级代理嫌疑",
+      "pred_tier": "一级代理嫌疑",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0002",
+      "role": "二级代理嫌疑",
+      "true_tier": "二级代理嫌疑",
+      "pred_tier": "一级代理嫌疑",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0003",
+      "role": "二级代理嫌疑",
+      "true_tier": "二级代理嫌疑",
+      "pred_tier": "一级代理嫌疑",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0004",
+      "role": "二级代理嫌疑",
+      "true_tier": "二级代理嫌疑",
+      "pred_tier": "一级代理嫌疑",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0005",
+      "role": "二级代理嫌疑",
+      "true_tier": "二级代理嫌疑",
+      "pred_tier": "一级代理嫌疑",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0006",
+      "role": "二级代理嫌疑",
+      "true_tier": "二级代理嫌疑",
+      "pred_tier": "二级代理嫌疑",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0007",
+      "role": "二级代理嫌疑",
+      "true_tier": "二级代理嫌疑",
+      "pred_tier": "二级代理嫌疑",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0008",
+      "role": "二级代理嫌疑",
+      "true_tier": "二级代理嫌疑",
+      "pred_tier": "二级代理嫌疑",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0009",
+      "role": "二级代理嫌疑",
+      "true_tier": "二级代理嫌疑",
+      "pred_tier": "二级代理嫌疑",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0010",
+      "role": "二级代理嫌疑",
+      "true_tier": "二级代理嫌疑",
+      "pred_tier": "二级代理嫌疑",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0011",
+      "role": "三级代理嫌疑",
+      "true_tier": "三级代理嫌疑",
+      "pred_tier": "三级代理嫌疑",
+      "true_laundering": false,
+      "pred_laundering": true
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0012",
+      "role": "三级代理嫌疑",
+      "true_tier": "三级代理嫌疑",
+      "pred_tier": "三级代理嫌疑",
+      "true_laundering": false,
+      "pred_laundering": true
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0013",
+      "role": "三级代理嫌疑",
+      "true_tier": "三级代理嫌疑",
+      "pred_tier": "三级代理嫌疑",
+      "true_laundering": false,
+      "pred_laundering": true
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0014",
+      "role": "三级代理嫌疑",
+      "true_tier": "三级代理嫌疑",
+      "pred_tier": "三级代理嫌疑",
+      "true_laundering": false,
+      "pred_laundering": true
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0015",
+      "role": "三级代理嫌疑",
+      "true_tier": "三级代理嫌疑",
+      "pred_tier": "三级代理嫌疑",
+      "true_laundering": false,
+      "pred_laundering": true
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0016",
+      "role": "三级代理嫌疑",
+      "true_tier": "三级代理嫌疑",
+      "pred_tier": "三级代理嫌疑",
+      "true_laundering": false,
+      "pred_laundering": true
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0017",
+      "role": "三级代理嫌疑",
+      "true_tier": "三级代理嫌疑",
+      "pred_tier": "三级代理嫌疑",
+      "true_laundering": false,
+      "pred_laundering": true
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0018",
+      "role": "三级代理嫌疑",
+      "true_tier": "三级代理嫌疑",
+      "pred_tier": "三级代理嫌疑",
+      "true_laundering": false,
+      "pred_laundering": true
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0019",
+      "role": "三级代理嫌疑",
+      "true_tier": "三级代理嫌疑",
+      "pred_tier": "三级代理嫌疑",
+      "true_laundering": false,
+      "pred_laundering": true
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0020",
+      "role": "三级代理嫌疑",
+      "true_tier": "三级代理嫌疑",
+      "pred_tier": "三级代理嫌疑",
+      "true_laundering": false,
+      "pred_laundering": true
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0021",
+      "role": "三级代理嫌疑",
+      "true_tier": "三级代理嫌疑",
+      "pred_tier": "三级代理嫌疑",
+      "true_laundering": false,
+      "pred_laundering": true
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0022",
+      "role": "三级代理嫌疑",
+      "true_tier": "三级代理嫌疑",
+      "pred_tier": "三级代理嫌疑",
+      "true_laundering": false,
+      "pred_laundering": true
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0023",
+      "role": "三级代理嫌疑",
+      "true_tier": "三级代理嫌疑",
+      "pred_tier": "三级代理嫌疑",
+      "true_laundering": false,
+      "pred_laundering": true
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0024",
+      "role": "三级代理嫌疑",
+      "true_tier": "三级代理嫌疑",
+      "pred_tier": "三级代理嫌疑",
+      "true_laundering": false,
+      "pred_laundering": true
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0025",
+      "role": "三级代理嫌疑",
+      "true_tier": "三级代理嫌疑",
+      "pred_tier": "三级代理嫌疑",
+      "true_laundering": false,
+      "pred_laundering": true
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0026",
+      "role": "三级代理嫌疑",
+      "true_tier": "三级代理嫌疑",
+      "pred_tier": "三级代理嫌疑",
+      "true_laundering": false,
+      "pred_laundering": true
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0027",
+      "role": "三级代理嫌疑",
+      "true_tier": "三级代理嫌疑",
+      "pred_tier": "三级代理嫌疑",
+      "true_laundering": false,
+      "pred_laundering": true
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0028",
+      "role": "三级代理嫌疑",
+      "true_tier": "三级代理嫌疑",
+      "pred_tier": "三级代理嫌疑",
+      "true_laundering": false,
+      "pred_laundering": true
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0029",
+      "role": "三级代理嫌疑",
+      "true_tier": "三级代理嫌疑",
+      "pred_tier": "三级代理嫌疑",
+      "true_laundering": false,
+      "pred_laundering": true
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0030",
+      "role": "三级代理嫌疑",
+      "true_tier": "三级代理嫌疑",
+      "pred_tier": "三级代理嫌疑",
+      "true_laundering": false,
+      "pred_laundering": true
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0031",
+      "role": "三级代理嫌疑",
+      "true_tier": "三级代理嫌疑",
+      "pred_tier": "三级代理嫌疑",
+      "true_laundering": false,
+      "pred_laundering": true
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0032",
+      "role": "三级代理嫌疑",
+      "true_tier": "三级代理嫌疑",
+      "pred_tier": "三级代理嫌疑",
+      "true_laundering": false,
+      "pred_laundering": true
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0033",
+      "role": "三级代理嫌疑",
+      "true_tier": "三级代理嫌疑",
+      "pred_tier": "三级代理嫌疑",
+      "true_laundering": false,
+      "pred_laundering": true
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0034",
+      "role": "三级代理嫌疑",
+      "true_tier": "三级代理嫌疑",
+      "pred_tier": "三级代理嫌疑",
+      "true_laundering": false,
+      "pred_laundering": true
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0035",
+      "role": "三级代理嫌疑",
+      "true_tier": "三级代理嫌疑",
+      "pred_tier": "三级代理嫌疑",
+      "true_laundering": false,
+      "pred_laundering": true
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0036",
+      "role": "归集转出线索",
+      "true_tier": null,
+      "pred_tier": "二级代理嫌疑",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0037",
+      "role": "做账/代收付线索",
+      "true_tier": null,
+      "pred_tier": "二级代理嫌疑",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0038",
+      "role": "过路/水房线索",
+      "true_tier": null,
+      "pred_tier": "二级代理嫌疑",
+      "true_laundering": true,
+      "pred_laundering": true
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0039",
+      "role": "跑分线索",
+      "true_tier": null,
+      "pred_tier": "二级代理嫌疑",
+      "true_laundering": true,
+      "pred_laundering": true
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0040",
+      "role": "平台内转账噪音",
+      "true_tier": null,
+      "pred_tier": "待定外围",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0041",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "三级代理嫌疑",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0042",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "三级代理嫌疑",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0043",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "三级代理嫌疑",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0044",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0045",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0046",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0047",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0048",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0049",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0050",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0051",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0052",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0053",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0054",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0055",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0056",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0057",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0058",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0059",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0060",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0061",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0062",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0063",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0064",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0065",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0066",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0067",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0068",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0069",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0070",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0071",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0072",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0073",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0074",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0075",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0076",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0077",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0078",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0079",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0080",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0081",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0082",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0083",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0084",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0085",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0086",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0087",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0088",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0089",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0090",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0091",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0092",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0093",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0094",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0095",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0096",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0097",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0098",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0099",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0100",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0101",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0102",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0103",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0104",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0105",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0106",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0107",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0108",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0109",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0110",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0111",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0112",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0113",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0114",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0115",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0116",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0117",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0118",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0119",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0120",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0121",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0122",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0123",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0124",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0125",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0126",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0127",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0128",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0129",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0130",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0131",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0132",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0133",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0134",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0135",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0136",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0137",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0138",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0139",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0140",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0141",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0142",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0143",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0144",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0145",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0146",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0147",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0148",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0149",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0150",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0151",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0152",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0153",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0154",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0155",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0156",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0157",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0158",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0159",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0160",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0161",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0162",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0163",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0164",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0165",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0166",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0167",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0168",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0169",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0170",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0171",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0172",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0173",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0174",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0175",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0176",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0177",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0178",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0179",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0180",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0181",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0182",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0183",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0184",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0185",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0186",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0187",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0188",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0189",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0190",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0191",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0192",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0193",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0194",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0195",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0196",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0197",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0198",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0199",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0200",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0201",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0202",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0203",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0204",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0205",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0206",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0207",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0208",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0209",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0210",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0211",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0212",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0213",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0214",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0215",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0216",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0217",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0218",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0219",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0220",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0221",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0222",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0223",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0224",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0225",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0226",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0227",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0228",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0229",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0230",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0231",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0232",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0233",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0234",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0235",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0236",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0237",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0238",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0239",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0240",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0241",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0242",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0243",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0244",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0245",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0246",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0247",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0248",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0249",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0250",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0251",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0252",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0253",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0254",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0255",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0256",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0257",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0258",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0259",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0260",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0261",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0262",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0263",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0264",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0265",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0266",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0267",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0268",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0269",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0270",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0271",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0272",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0273",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0274",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0275",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0276",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0277",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0278",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0279",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0280",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0281",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0282",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0283",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0284",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0285",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0286",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0287",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0288",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0289",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0290",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0291",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0292",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0293",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0294",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0295",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0296",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0297",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0298",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0299",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0300",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0301",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0302",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0303",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0304",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0305",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0306",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0307",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0308",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0309",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0310",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0311",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0312",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0313",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0314",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0315",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0316",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0317",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0318",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0319",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0320",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0321",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0322",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0323",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0324",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0325",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0326",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0327",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0328",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0329",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0330",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0331",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0332",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0333",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0334",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0335",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0336",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0337",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0338",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0339",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0340",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0341",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0342",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0343",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0344",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0345",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0346",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0347",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0348",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0349",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0350",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0351",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0352",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0353",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0354",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0355",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0356",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0357",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0358",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0359",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0360",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0361",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0362",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0363",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0364",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0365",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0366",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0367",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0368",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0369",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0370",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0371",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0372",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0373",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0374",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0375",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0376",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0377",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0378",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0379",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0380",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0381",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0382",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0383",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0384",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0385",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0386",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0387",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0388",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0389",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0390",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0391",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0392",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0393",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0394",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0395",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0396",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0397",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0398",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0399",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0400",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0401",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0402",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0403",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0404",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0405",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0406",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0407",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0408",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0409",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0410",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0411",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0412",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0413",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0414",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0415",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0416",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0417",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0418",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0419",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0420",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0421",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0422",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0423",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0424",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0425",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0426",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0427",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0428",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0429",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0430",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0431",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0432",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0433",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0434",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0435",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0436",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0437",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0438",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0439",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0440",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0441",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0442",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0443",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0444",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0445",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0446",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0447",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0448",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0449",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0450",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0451",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0452",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0453",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0454",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0455",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0456",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0457",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0458",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0459",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0460",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0461",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0462",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0463",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0464",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0465",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0466",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0467",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0468",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0469",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0470",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0471",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0472",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0473",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0474",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0475",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0476",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0477",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0478",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0479",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0480",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0481",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0482",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0483",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0484",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0485",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0486",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0487",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0488",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0489",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0490",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0491",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0492",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0493",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0494",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0495",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0496",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0497",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0498",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    },
+    {
+      "scenario": "s500_clean_full_holdout",
+      "account": "syn0499",
+      "role": "赌客线索",
+      "true_tier": "赌客线索",
+      "pred_tier": "赌客线索",
+      "true_laundering": false,
+      "pred_laundering": false
+    }
+  ]
+}

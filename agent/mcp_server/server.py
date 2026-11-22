@@ -26,12 +26,16 @@ def st(v):
 try:
     st({'status': 'running', 'prefix': sys.prefix})
     import numpy
-    import sklearn
-    from sklearn.cluster import KMeans
     import threadpoolctl
-    st({'status': 'imports-ok', 'sklearn_file': sklearn.__file__, 'prefix': sys.prefix})
+    st({'status': 'imports-ok', 'numpy_file': numpy.__file__, 'prefix': sys.prefix})
+    # 2026-11-12：这里原来热的是 sklearn.cluster.KMeans——分析机已经不用它了
+    # （它就是办案电脑上要装微软运行库、被 360 按文件名拦的那一串）。
+    # 层级聚类现在是纯 numpy 手写（见 算法对照/双跑结果-2026-11-12.md），
+    # 所以预热改成热 numpy 自己的运算：同样一次小矩阵乘，把 OpenBLAS 那套线程先转起来。
+    随 = numpy.random.default_rng(0)
+    点 = 随.normal(size=(200, 9))
     with threadpoolctl.threadpool_limits(limits=1):
-        KMeans(n_clusters=2, n_init=1, random_state=0).fit([[0., 0.], [0., 1.], [9., 9.], [9., 10.]])
+        (点 @ 点.T).sum()
     st({'status': 'done', 'seconds': round(time.perf_counter() - t, 3)})
 except Exception as exc:
     st({'status': 'failed', 'error': str(exc)})
@@ -54,11 +58,13 @@ def _preload_heavy():
     """主线程预载：必须在任何 anyio 运行环境启动前完成首次加载。"""
     started = time.perf_counter()
     try:
+        # 同上：热 numpy 本身（分析机现在只依赖 numpy 做聚类，不再依赖 sklearn）
         import numpy
-        from sklearn.cluster import KMeans
         import threadpoolctl
+        随 = numpy.random.default_rng(0)
+        点 = 随.normal(size=(200, 9))
         with threadpoolctl.threadpool_limits(limits=1):
-            KMeans(n_clusters=2, n_init=1, random_state=0).fit([[0., 0.], [0., 1.], [9., 9.], [9., 10.]])
+            (点 @ 点.T).sum()
         log(f'主线程预载完成：{time.perf_counter() - started:.2f}s')
     except Exception as exc:
         log(f'主线程预载失败（继续运行）：{type(exc).__name__}: {exc}')

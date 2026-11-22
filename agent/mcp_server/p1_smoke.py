@@ -250,7 +250,9 @@ def check判据表缺失():
     环境 = dict(os.environ, FUNDFLOW_CASE_PACKS=假目录,
                 MPLCONFIGDIR=os.environ.get('MPLCONFIGDIR', '/tmp/mplcache'))
     跑 = subprocess.run([sys.executable, '-X', 'utf8', '-c', 判据表子代码, 假目录],
-                        cwd=str(根), env=环境, capture_output=True, text=True, timeout=300)
+                        cwd=str(根), env=环境, capture_output=True, text=True,
+                        encoding='utf-8', errors='replace',  # Windows 默认按本地 GBK 解码子进程输出会乱码，显式 UTF-8（2026-11-22 Windows 实测修正）
+                        timeout=300)
     assert 跑.returncode == 0, ('表缺失时 import 不该崩 / 该拦的没拦住', 跑.returncode,
                                跑.stdout[-500:], 跑.stderr[-800:])
     assert '判据表缺失已拦住' in 跑.stdout, 跑.stdout

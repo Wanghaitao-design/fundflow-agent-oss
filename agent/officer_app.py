@@ -386,14 +386,9 @@ def main():
         return 0 if 过 else 1
     import tkinter as tk
     from tkinter import ttk
-    try:
-        样式 = ttk.Style()
-        for 名 in ('vista', 'clam', 'default'):
-            if 名 in 样式.theme_names():
-                样式.theme_use(名)
-                break
-    except Exception:
-        pass
+    # 2026-11-22：样式块原来在这里、建窗之前——ttk.Style() 没 root 时自建一个
+    # 标题 "tk" 的空窗口，民警每次打开都多一个莫名小灰窗（户主实测抓到）。
+    # 已挪进 窗口.__init__（root 建好之后）。这里绝不能再碰 ttk。
     窗口(tk, ttk).跑()
     return 0
 

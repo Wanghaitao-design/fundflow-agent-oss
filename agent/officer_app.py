@@ -163,6 +163,17 @@ class 窗口:
         self.根 = tk.Tk()
         self.根.title('网赌资金研判 · 民警版')
         self.根.geometry('760x560')
+        # 样式必须在 root 建好之后设：ttk.Style() 在还没有 root 时会自己偷偷建一个
+        # 标题为 "tk" 的空窗口（2026-11-22 户主实测：软件旁边多出一个莫名小灰窗）。
+        # 原来这段写在 main() 里、建窗之前，就是病根。
+        try:
+            样式 = ttk.Style()
+            for 名 in ('vista', 'clam', 'default'):
+                if 名 in 样式.theme_names():
+                    样式.theme_use(名)
+                    break
+        except Exception:
+            pass
         self.任务中 = False
         self.结果目录 = None
         self.消息队列 = queue.Queue()

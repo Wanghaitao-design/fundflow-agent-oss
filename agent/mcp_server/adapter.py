@@ -51,8 +51,14 @@ class EvidenceAnalyzer(ga.GamblingAnalyzer):
         # 所以删掉这一行；限流照旧——numpy 的矩阵乘一样会起 OpenBLAS 线程。
         import os
         os.environ['LOKY_MAX_CPU_COUNT'] = '1'
-        from threadpoolctl import threadpool_limits
-        with threadpool_limits(limits=1):
+        try:
+            from threadpoolctl import threadpool_limits
+            with threadpool_limits(limits=1):
+                return super()._kmeans_clustering(X, node_list)
+        except ImportError:
+            # 2026-11-22 本机打包实测：requirements-build 精简清单没带 threadpoolctl，
+            # 这一句把整批判层掀了。限线程只是防微型计算超时的优化，缺它顶多算得慢，
+            # 绝不能成为判层的前提——缺了就照常算。
             return super()._kmeans_clustering(X, node_list)
 
     def _classify_agent(self, info, *args):

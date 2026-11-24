@@ -148,7 +148,10 @@ def 自检():
     if 缺:
         return False, '缺产物：' + '、'.join(缺) + '\n' + ''.join(日志), 输出
     全文 = ''.join(日志)
-    响 = [ln for ln in 全文.splitlines() if ln.startswith('!!')]
+    # 只有「这一步没跑成」这种（产物残缺、不能交出去）才让自检 FAIL；
+    # 「判层这一步提示」类提醒（小样本需复核、循环互转等）本来就该写进产物
+    # 提醒人工看，出现它们恰恰说明提醒通道在工作，不算失败（2026-11-24 环收拢配套）。
+    响 = [ln for ln in 全文.splitlines() if ln.startswith('!!') and '这一步没跑成' in ln]
     if 响:
         return False, ('这一轮分析里有%d条要紧提醒，不能算通过：\n%s\n%s'
                        % (len(响), '\n'.join(响), 全文)), 输出

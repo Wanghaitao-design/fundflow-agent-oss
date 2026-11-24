@@ -2,7 +2,6 @@
 import copy
 from collections import Counter
 import pandas as pd
-import networkx as nx
 from common import context, folder, ok, tool, finish
 from adapter import LEVELS, validate_thresholds
 
@@ -24,8 +23,10 @@ def classify_tiers(dataset_id: str, thresholds: dict[str, float] | None = None) 
     for key in ('05_tiers', '05_ranking', '05_laundering', '05_structure', '05_profile', '05_trace', '06_export'):
         ctx.get('results', {}).pop(key, None)
     a = ctx['analyzer']
-    if not nx.is_directed_acyclic_graph(a.G):
-        raise ValueError('资金图存在有向环；旧 _compute_topo_depth 在环上可能不终止。本阶段显式阻止判层，请确认后续环处理适配策略；图与去重结果仍可读取。')
+    # 2026-11-24：这里原来见有向环就 raise、整批判不了层，理由是"旧 BFS 在环上
+    # 可能不终止"——实测已推翻（现实现 100 节点环 0.2ms 终止），且判层用的拓扑深度
+    # 已改成环收拢算法（环上账号同层，见 gambling_analysis._环收拢拓扑深度），
+    # 所以正常判层，环组进 issues 提醒人工核查，不再掀桌。
     a.nodes = copy.deepcopy(ctx['base_nodes'])
     a.overrides, a.rules, a.cluster_evidence = dict(overrides), {}, {}
     a._classify_levels()
@@ -48,6 +49,12 @@ def classify_tiers(dataset_id: str, thresholds: dict[str, float] | None = None) 
         issues.append('样本<10：聚类未运行，回退百分位规则；该路径仍可能产生一级候选。')
     if n >= 10 and not a.cluster_evidence:
         issues.append('聚类失败，已显式记录回退规则；原因请查 stderr 日志。')
+    环组 = getattr(a, '环组', [])
+    if 环组:
+        涉及 = sum(len(g) for g in 环组)
+        issues.append(f'本批有{len(环组)}组循环互转（涉及{涉及}个账号）：环上账号已按同一层深度对待，'
+                      f'层级只是初步参考，建议人工核查环性质（自己人对冲、还是走账闭环）。'
+                      f'环组明细：' + '；'.join('↔'.join(map(str, g)) for g in 环组[:5]))
     result = finish(ctx, '05_tiers', ok({'dataset_id': dataset_id, '层级分布': dict(Counter(r['层级'] for r in rows)), '判定': rows},
         {'聚类': a.cluster_evidence or {'k': 0, '方法': '规则回退'}, '参数': a.parameters,
          '参数来源': '调用方覆盖' if overrides else '旧算法自适应百分位默认', '覆盖': overrides,

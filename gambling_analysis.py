@@ -1118,6 +1118,7 @@ class GamblingAnalyzer:
         self.nodes = {}   # node_id → {name, level, metrics}
         self.edges = []   # (from, to, amount, count)
         self.G = nx.DiGraph()
+        self.环组 = []    # 循环互转的账号组（强连通分量>1）；图无环时保持空表
 
     def run(self):
         print("\n[1/5] 数据清洗与标准化...")
@@ -2472,7 +2473,10 @@ class GamblingAnalyzer:
     # ═══════════════════════════════════════════════════════════
 
     def _compute_topo_depth(self) -> dict:
-        """计算拓扑深度（BFS）"""
+        """计算拓扑深度（BFS）。图上有向环时走 环收拢拓扑深度()——
+        环上账号必须同层，不许被遍历顺序编成假层级（2026-11-24）。"""
+        if not nx.is_directed_acyclic_graph(self.G):
+            return self._环收拢拓扑深度()
         from collections import deque
         G = self.G
         topo_depth: dict = {}
@@ -2496,6 +2500,31 @@ class GamblingAnalyzer:
                     if succ not in in_queue:
                         queue.append(succ)
                         in_queue.add(succ)
+        return topo_depth
+
+    def _环收拢拓扑深度(self) -> dict:
+        """有向环上的拓扑深度：把每个强连通分量（互相都转得到的账号堆）收拢成一个
+        超级节点，在收拢后的无环图上算最长路径深度，环内所有账号取同一个深度。
+
+        为什么（2026-11-24 实测，dev-recon\\probe_topo.py）：普通 BFS 在环上虽然终止
+        （旧注释"可能不终止"已过时），但深度由图遍历顺序随手决定——一个 100 个账号
+        互相转圈的环会被编成深度 1~100 的假金字塔，喂进聚类就会把正常互转当成层级。
+        收拢算法给环内每个账号同一个深度，与遍历顺序无关、可复现、可解释：
+        "这一堆账号互相循环转账，内部排不出先后，按同一层对待"。
+        顺带把环组记进 self.环组，供工具层和报告点名。"""
+        G = self.G
+        缩 = nx.condensation(G)          # 每个强连通分量缩成一个点，分量内部边自动消失
+        深度 = {}
+        for c in nx.topological_sort(缩):
+            深度[c] = max((深度[p] + 1 for p in 缩.predecessors(c)), default=0)
+        topo_depth: dict = {}
+        self.环组 = []
+        for c in 缩.nodes:
+            成员 = sorted(缩.nodes[c]['members'])
+            for m in 成员:
+                topo_depth[m] = 深度[c]
+            if len(成员) > 1:
+                self.环组.append(成员)
         return topo_depth
 
     def _build_feature_matrix(self, node_list: list, topo_depth: dict) -> 'np.ndarray':

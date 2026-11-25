@@ -18,7 +18,7 @@ def main():
     assert call(tool,event('classify_tiers','bad'))['decision']=='block'
     assert call(tool,event('classify_tiers',{}))['decision']=='block'
     assert call(tool,event('classify_tiers',{'结论':{'判定':[{'依据':{}}]},'证据':{},'异常':[]}))['additionalContext']
-    assert call(tool,event('detect_laundering',{'结论':{'判定':[{'五维':[],'命中说明':None}]},'证据':{},'异常':[]}))['additionalContext']
+    assert call(tool,event('detect_laundering',{'结论':{'判定':[{'维度明细':[],'命中说明':None}]},'证据':{},'异常':[]}))['additionalContext']
     assert call(tool,event('scan_structure',{'结论':{'完整':False},'证据':{},'异常':[]}))['additionalContext']
     assert call(tool,{'name':'other_tool'})=={}
     assert call(tool,event('scan_dataset','bad'))=={}

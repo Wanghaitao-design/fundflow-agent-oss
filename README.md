@@ -70,7 +70,7 @@ Everything is assembled through AGH interfaces and registries. **No upstream sou
    Builds a fund network with entities as nodes and transfers as edges, and records four layers of de-duplication. Tier classification, community detection, shared accounts, bookkeeping accounts, large settlements, and temporal patterns help reveal organizational relationships and key nodes.
 
 3. **Money-laundering screening and investigation priority**
-   Screens leads across five dimensions and records the threshold and hit explanation for each. Risk scores rank accounts for investigation order; the score is not a probability of guilt or a criminal finding.
+   Screens leads across six dimensions and records the threshold and hit explanation for each. Risk scores rank accounts for investigation order; the score is not a probability of guilt or a criminal finding.
 
 4. **Fund tracing and account profiling**
    Traces funds from a target account with depth and size limits, returning intermediate nodes and relationships. Produces a one-page profile of transaction behavior, counterparty distribution, and temporal patterns.
@@ -84,7 +84,7 @@ Everything is assembled through AGH interfaces and registries. **No upstream sou
 ### 1.4 What is new
 
 1. **Separated computation and reasoning.** Amounts, scores, and paths are computed by Python tools; the model never estimates them. The model understands the task, chooses the next action, and organizes explanations.
-2. **A three-part contract: conclusion, evidence, anomalies.** Tier decisions must carry a metric value, percentile, and applicable rule. Laundering decisions must carry five dimensions, thresholds, and hit explanations. Detector failures must be listed explicitly.
+2. **A three-part contract: conclusion, evidence, anomalies.** Tier decisions must carry a metric value, percentile, and applicable rule. Laundering decisions must carry all six dimensions, thresholds, and hit explanations. Detector failures must be listed explicitly.
 3. **Governance hooks, approvals, and an event ledger.** Tool results pass a contract check, side effects require human approval, and every state change enters an append-only ledger that can be replayed and audited.
 4. **Dependency invalidation and recomputation.** After new data or a threshold change, downstream results that depend on stale inputs are invalidated before recomputation, so old and new conclusions do not mix.
 5. **Synthetic range and independent acceptance.** Moves the project from "it runs" to "it can be delivered and reviewed," with normal, boundary, and failure evidence.
@@ -226,7 +226,7 @@ The video walks through:
 | `scan_dataset` | `folder_path` | `identity_path=None` | Scan a local statement directory; parse and check integrity | `dataset_id`, file count, transaction count, graphable flag; evidence includes file list, failure list, unverified ratio, and time span |
 | `build_fund_graph` | `dataset_id` | — | Clean, apply four layers of de-duplication, merge same-subject accounts, cache the graph | Node count, edge count, per-layer exclusion counts |
 | `classify_tiers` | `dataset_id` | `thresholds=None` | Cluster plus rule correction; assign tiers | Tier distribution; per-row decision with metric value, percentile, and applicable rule |
-| `detect_laundering` | `dataset_id` | — | Five-dimension laundering detection; write back to nodes | Decisions, suspect-node count, five dimensions, thresholds, hit explanations |
+| `detect_laundering` | `dataset_id` | — | Six-dimension laundering detection; write back to nodes | Decisions, suspect-node count, per-dimension scores, thresholds, hit explanations |
 | `scan_structure` | `dataset_id` | — | Shared accounts, bookkeeping accounts, credit settlement, large settlement, temporal patterns, one-way accounts | Hits, per-detector counts, detector status, completeness flag |
 | `rank_suspects` | `dataset_id` | — | Risk scoring and ranking over analyzed nodes | Ranking |
 | `trace_funds` | `dataset_id` | `target_id=None`, `max_depth=5`, `top_n=5`, `min_common=2` | BFS fund tracing and grouping by identical upstream sets | Seeds, traced paths, common-upstream members, group count |
@@ -314,7 +314,7 @@ AGH records the approval chain as `approval/asked` → `approval/decided` → `e
 
 - Checks only the three key tools: `classify_tiers`, `detect_laundering`, and `scan_structure`.
 - **Hard block:** invalid hook payload, missing `content.text`, non-JSON result text, or a result missing the `结论/证据/异常` contract.
-- **Soft note:** a tier decision missing metric value/percentile/rule; a laundering decision missing five dimensions/threshold/explanation; a detector failure not listed explicitly.
+- **Soft note:** a tier decision missing metric value/percentile/rule; a laundering decision missing a dimension entry/threshold/explanation; a detector failure not listed explicitly.
 - The hook always emits a valid JSON object: `{"decision":"block","reason":"..."}`, `{"additionalContext":"..."}`, or `{}`.
 
 **`Stop`: delivery stage gates**

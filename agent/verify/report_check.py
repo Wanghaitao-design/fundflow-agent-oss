@@ -84,9 +84,9 @@ def check(directory):
   checks["依据三元组"]=bool(tiers) and all(all(r.get("依据",{}).get(k) for k in ("指标值","百分位","适用规则")) for r in tiers)
   if not checks["依据三元组"]:issues.append("层级判定缺少依据三元组")
   lr=rs["05_laundering"]["结论"].get("判定",[])
-  dimensions={'境外关键词','高过路率','快速中转','整数金额','单线中转'}
-  checks["洗钱证据"]=bool(lr) and all(isinstance(r.get('五维'),list) and len(r['五维'])==5 and {x.get('维度') for x in r['五维']}==dimensions and r.get('命中说明') is not None and all(x.get('阈值') is not None and x.get('说明') and x.get('得分') is not None for x in r['五维']) for r in lr)
-  if not checks["洗钱证据"]:issues.append("洗钱判定缺少五维、阈值或命中说明")
+  dimensions={'境外关键词','高过路率','快速中转','整数金额','单线中转','归集沉淀'}
+  checks["洗钱证据"]=bool(lr) and all(isinstance(r.get('维度明细'),list) and len(r['维度明细'])==6 and {x.get('维度') for x in r['维度明细']}==dimensions and r.get('命中说明') is not None and all(x.get('阈值') is not None and x.get('说明') and x.get('得分') is not None for x in r['维度明细']) for r in lr)
+  if not checks["洗钱证据"]:issues.append("洗钱判定缺少维度明细、阈值或命中说明")
   st=rs.get("05_structure",{}).get("结论",{})
   if st.get("完整") is False:
    failed=[k for k,v in st.get("检测器状态",{}).items() if v.get("状态")=="失败"];warnings.append("结构检测不完整；失败检测器："+",".join(failed or ["未提供"]))
@@ -114,7 +114,7 @@ def check(directory):
   lf=root/"05_laundering.csv"
   if lf.is_file():
    with lf.open(encoding="utf-8-sig",newline="") as f:cols=next(csv.reader(f),[])
-   required=("账号","总分","封顶前得分","洗钱嫌疑","命中说明","五维","纳入分析");checks["洗钱表列"]=all(x in cols for x in required)
+   required=("账号","总分","封顶前得分","洗钱嫌疑","命中说明","维度明细","纳入分析");checks["洗钱表列"]=all(x in cols for x in required)
    if not checks["洗钱表列"]:warnings.append("05_laundering.csv列不完整")
   if not ev.get("Trace引用"):warnings.append("未提供AGH Trace引用")
   checks["金额单位标注"]=bool(re.search(r"元|万元|人民币",visible))

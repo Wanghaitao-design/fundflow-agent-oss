@@ -59,10 +59,10 @@ def main():
         htmlcase('免责句缺失',lambda s:s.replace('仅供侦查核实，嫌疑≠司法结论。','').replace('最终司法结论由司法机关作出',''))
         htmlcase('禁用词',lambda s:s.replace('</body>','<p>已认定犯罪事实并定罪</p></body>'))
         htmlcase('未匹配金额警告',lambda s:s.replace('</body>','<p>不明金额：1万元</p></body>'),'PASS','万元数值')
-        for name,key in (('洗钱缺五维','五维'),('洗钱缺说明','命中说明')):
+        for name,key in (('洗钱缺维度明细','维度明细'),('洗钱缺说明','命中说明')):
             report,evidence=fresh();data=json.loads(evidence.read_text(encoding='utf-8'));data['工具结果']['05_laundering']['结论']['判定'][0].pop(key)
             evidence.write_text(json.dumps(data,ensure_ascii=False),encoding='utf-8');assert check(root)['状态']=='FAIL';cases[name]='FAIL'
-        report,evidence=fresh();data=json.loads(evidence.read_text(encoding='utf-8'));data['工具结果']['05_laundering']['结论']['判定'][0]['五维'][0].pop('阈值')
+        report,evidence=fresh();data=json.loads(evidence.read_text(encoding='utf-8'));data['工具结果']['05_laundering']['结论']['判定'][0]['维度明细'][0].pop('阈值')
         evidence.write_text(json.dumps(data,ensure_ascii=False),encoding='utf-8');assert check(root)['状态']=='FAIL';cases['洗钱缺阈值']='FAIL'
         report,evidence=fresh();data=json.loads(evidence.read_text(encoding='utf-8'));data['工具结果']['05_profile']['结论']['指标']['in_flow']=8000
         evidence.write_text(json.dumps(data,ensure_ascii=False),encoding='utf-8')

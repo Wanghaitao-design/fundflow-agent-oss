@@ -7,7 +7,7 @@ import textwrap
 import pandas as pd
 from common import context, folder, ok, tool, finish, ga
 
-DIMENSIONS = ('境外关键词', '高过路率', '快速中转', '整数金额', '单线中转')
+DIMENSIONS = ('境外关键词', '高过路率', '快速中转', '整数金额', '单线中转', '归集沉淀')
 
 
 def _偏移行号表(code):
@@ -60,7 +60,7 @@ def 找加分行(method):
 
 @tool
 def detect_laundering(dataset_id: str) -> dict:
-    """执行旧五维洗钱识别并写回节点，供rank使用。顺序build→classify→detect_laundering→rank；classify重算后须重新检测。"""
+    """执行六维洗钱识别并写回节点，供rank使用。顺序build→classify→detect_laundering→rank；classify重算后须重新检测。"""
     ctx = context(dataset_id)
     if 'tier_result' not in ctx:
         raise ValueError('请先 build_fund_graph → classify_tiers')
@@ -69,7 +69,7 @@ def detect_laundering(dataset_id: str) -> dict:
     a = ctx['analyzer']
     method = a._detect_money_laundering
     additions, 行号读法 = 找加分行(method)
-    if len(additions) != 6:
+    if len(additions) != 7:
         raise ValueError('旧洗钱加分的结构变了，或者行号没读出来（读法：%s，只读到%d处）——'
                          '洗钱这一项不能出，要人工核对' % (行号读法, len(additions)))
     mapping = dict(zip(additions, (DIMENSIONS[0], DIMENSIONS[0], *DIMENSIONS[1:])))
@@ -111,16 +111,19 @@ def detect_laundering(dataset_id: str) -> dict:
         '单线中转': {'入度上限': ga.SINGLE_LINE_MAX_RELATIONS, '出度上限': ga.SINGLE_LINE_MAX_RELATIONS,
                    '流入下限元': ga.LEVEL2_MIN_INFLOW,
                    '层级条件': '上游平均层级<下游平均层级且下游平均层级≥4'},
-        '嫌疑规则': '境外≥3笔且原始分≥40；或境外≥1笔且原始分≥25且flag≥1；或原始分≥30且flag≥2'}
+        '归集沉淀': {'流入下限元': ga.AGG_MIN_INFLOW, '流出流入比上限': ga.AGG_MAX_OUT_RATIO,
+                   '净沉淀流入比下限': ga.AGG_MIN_RETAIN, '独立付款人数下限': ga.AGG_MIN_PAYER_DEG,
+                   '收款自然日下限': ga.AGG_MIN_PAY_DAYS},
+        '嫌疑规则': '境外≥3笔且原始分≥40；或境外≥1笔且原始分≥25且flag≥1；或原始分≥30且flag≥2；或归集沉淀五条件全满足'}
     rows = []
     for n, info in a.nodes.items():
         nid = str(n)
         raw = sum(scores[nid].values())
         if round(min(raw, 100), 1) != info['launder_score']:
-            raise ValueError(f'{nid} 五维回算与旧引擎不一致')
+            raise ValueError(f'{nid} 维度回算与旧引擎不一致')
         rows.append({'账号': nid, '总分': info['launder_score'], '封顶前得分': raw,
                      '洗钱嫌疑': info['is_launder_suspect'], '命中说明': info['launder_flags'],
-                     '五维': [{'维度': d, '得分': scores[nid][d], '命中': d in explanations[nid],
+                     '维度明细': [{'维度': d, '得分': scores[nid][d], '命中': d in explanations[nid],
                               '说明': explanations[nid].get(d, '未命中；不代表不存在风险'),
                               '阈值': thresholds[d]} for d in DIMENSIONS],
                      '纳入分析': info['total_flow'] >= ga.MONEY_LAUNDER_MIN_FLOW})

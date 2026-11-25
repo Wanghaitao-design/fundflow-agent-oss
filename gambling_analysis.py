@@ -151,6 +151,12 @@ MONEY_LAUNDER_TRANSIT_RATIO = PACK.num('过路转出占比')   # 流入后 >=80%
 MONEY_LAUNDER_MIN_FLOW      = PACK.num('洗钱最低流水')  # 至少 3万流水才纳入洗钱分析
 MONEY_LAUNDER_MAX_BALANCE_RATIO = PACK.num('结余占比上限')  # 净余额 < 流入 15%：钱没有留存，只是过路
 MONEY_LAUNDER_BURST_INTERVAL = PACK.num('快转窗口小时')   # 小时：收到钱后 24h 内转出视为高风险中转
+# ── 归集沉淀·钱只收不发（洗钱第6维，2026-11-25 补交接本欠账②，详见 03_门槛.csv 末行）──
+AGG_MIN_INFLOW    = PACK.num('归集沉淀最低流入')      # 流入不到这个数，谈不上"归集"
+AGG_MAX_OUT_RATIO = PACK.num('归集沉淀流出比上限')    # 流出/流入 低于这条线 = 钱收进来不走
+AGG_MIN_RETAIN    = PACK.num('归集沉淀沉淀下限')      # 净沉淀/流入 要超过这条线 = 钱真的留在账上
+AGG_MIN_PAYER_DEG = PACK.num('归集沉淀最少付款人数')  # 至少几个独立账户往里打钱（单人打款是工资/还款不是归集）
+AGG_MIN_PAY_DAYS  = PACK.num('归集沉淀最少收款天数')  # 进账至少跨几个自然日（挡凑钱看病那种"收一天就转走"）
 
 if PACK_ERROR:
     PACK.封上()   # 上面的常量已取完空值；此后谁再用这份哑表取值，当场报错，不许拿 0 算
@@ -2982,12 +2988,13 @@ class GamblingAnalyzer:
           · cp_key 同样已替换为规范ID
           · 与 self.nodes 的 key 完全一致，不需要任何额外映射
 
-        五维度打分：
+        六维度打分：
           A. 境外转账关键词命中（cp_key 或 remark 含境外词）
           B. 高过路率（out/in ≥ 80% 且净余额 < 15%）
           C. 快速中转（收款后 24h 内大额转出）
           D. 整数金额占比高（≥70% 整千，资金拆分特征）
           E. 上游高层→下游末端的单线中转路径
+          F. 归集沉淀·钱只收不发（多人多天打款、钱收进来不走；2026-11-25）
         """
         G = self.G
 
@@ -3049,6 +3056,20 @@ class GamblingAnalyzer:
             if n == 0:
                 continue
             round_ratio[str(owner)] = int((grp['amount_clean'] % 1000 == 0).sum()) / n
+
+        # ── F. 归集沉淀预备：每个 owner 的独立付款人数与进账自然天数 ────────
+        #    （2026-11-25 第6维。付款人数按收入侧 cp_key 去重数，不用图入度——
+        #     双向往来会让图入度失真）
+        agg_payers: dict = {}   # owner → 给他打钱的独立对象数
+        agg_days:   dict = {}   # owner → 有进账的自然日数
+        if 'is_income' in tx.columns:
+            inc_tx = tx[tx['is_income'] == True]
+            for owner, grp in inc_tx.groupby('owner_id'):
+                nid0 = str(owner)
+                agg_payers[nid0] = int(grp['cp_key'].astype(str).nunique())
+                if 'datetime_parsed' in grp.columns:
+                    agg_days[nid0] = int(
+                        grp['datetime_parsed'].dropna().dt.normalize().nunique())
 
         # ── 逐节点综合打分 ────────────────────────────────────────────────
         for node, info in self.nodes.items():
@@ -3112,17 +3133,34 @@ class GamblingAnalyzer:
                         flags.append('上游高层代理→下游末端账号（典型中转路径）')
                         l_score += 15
 
+            # F. 归集沉淀·钱只收不发（2026-11-25 第6维，补交接本欠账②）
+            #    B/C 抓的是「钱过境就走」；这一维抓「钱收进来不走」的取现卡/归集卡。
+            #    反例避让：凑钱看病牵头人流出比≈100%、只收一天，两条硬条件同时挡住
+            agg_hit = False
+            if (in_f >= AGG_MIN_INFLOW
+                    and agg_payers.get(nid, 0) >= AGG_MIN_PAYER_DEG
+                    and agg_days.get(nid, 0) >= AGG_MIN_PAY_DAYS):
+                keep_r = (in_f - out_f) / in_f
+                if out_f / in_f <= AGG_MAX_OUT_RATIO and keep_r >= AGG_MIN_RETAIN:
+                    agg_hit = True
+                    flags.append(
+                        f'归集沉淀（{agg_payers[nid]}人分{agg_days[nid]}天打款'
+                        f'¥{in_f / 10000:.1f}万，沉淀{keep_r:.0%}，流出仅{out_f / in_f:.0%}）')
+                    l_score += 35
+
             info['launder_score'] = round(min(l_score, 100), 1)
             info['launder_flags'] = flags
 
-            # 触发条件（三选一）：
+            # 触发条件（四选一）：
             #   1. 多次境外转账（≥40分）
             #   2. 单次境外+其他任意特征（≥25分且≥1个flag）
             #   3. 多特征综合（≥30分且≥2个flag）
+            #   4. 归集沉淀五条件全满足（2026-11-25：该形状本身完整，单 flag 即嫌疑）
             info['is_launder_suspect'] = (
                 (ov_cnt >= 3 and l_score >= 40) or
                 (ov_cnt >= 1 and l_score >= 25 and len(flags) >= 1) or
-                (l_score >= 30 and len(flags) >= 2)
+                (l_score >= 30 and len(flags) >= 2) or
+                agg_hit
             )
 
         total_launder = sum(1 for v in self.nodes.values() if v.get('is_launder_suspect'))

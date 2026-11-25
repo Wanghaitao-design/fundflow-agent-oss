@@ -1,4 +1,4 @@
-"""P1行为验收：旧算法等价、正向五维、重算失效、大表与报告门禁。"""
+"""P1行为验收：旧算法等价、正向六维、重算失效、大表与报告门禁。"""
 import contextlib
 import copy
 import io
@@ -125,7 +125,7 @@ def main():
         assert undetected['证据']['洗钱检测状态'] == '未检测'
         assert all(r['评分构成']['洗钱附加'] == 0 for r in undetected['结论']['排名'])
         output.append('PASS 判层重算失效洗钱/结构/排名/导出；未检测洗钱附加为0并明确状态')
-        # 构造明确正向的五维测试：所有记录都是虚构，比较旧方法结果。
+        # 构造明确正向的六维测试：所有记录都是虚构，比较旧方法结果。
         positive = copy.deepcopy(ctx['analyzer'])
         template = copy.deepcopy(next(iter(positive.nodes.values())))
         positive.G = nx.DiGraph()
@@ -149,12 +149,12 @@ def main():
         CACHE['p1_positive'] = {'id':'p1_positive','analyzer':positive,'tier_result':{},'issues':[],'results':{}}
         detect = check(detect_laundering('p1_positive'))
         mid = next(r for r in detect['结论']['判定'] if r['账号']=='synthetic_mid')
-        assert [r['得分'] for r in mid['五维']] == [40.,25.,20.,15.,15.], mid
+        assert [r['得分'] for r in mid['维度明细']] == [40.,25.,20.,15.,15.,0.], mid
         assert mid['总分'] == old.nodes['synthetic_mid']['launder_score'] == 100
         assert positive.nodes['synthetic_mid']['is_launder_suspect'] is True
         positive_rank = check(rank_suspects('p1_positive'))
         assert next(r for r in positive_rank['结论']['排名'] if r['账号'] == 'synthetic_mid')['评分构成']['洗钱附加'] == 15
-        output.append('PASS 正向五维40/25/20/15/15，原始115封顶100，与旧算法一致')
+        output.append('PASS 正向六维40/25/20/15/15/0，原始115封顶100，与旧算法一致')
         # 大图追线返回前50；文件保存全部，顺序与旧图一致。
         large = copy.deepcopy(ctx['analyzer'])
         large.G = nx.DiGraph()

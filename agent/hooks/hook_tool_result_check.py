@@ -27,8 +27,8 @@ def main():
             notes.append('classify_tiers存在层级判定缺少指标值/百分位/适用规则')
     elif name.endswith('detect_laundering'):
         rows=value.get('结论',{}).get('判定',[])
-        if any(not isinstance(r,dict) or not isinstance(r.get('五维'),list) or len(r['五维'])!=5 or r.get('命中说明') is None or any(not isinstance(x,dict) or x.get('阈值') is None or not x.get('说明') for x in r.get('五维',[])) for r in rows):
-            notes.append('detect_laundering存在判定缺少五维/阈值/说明')
+        if any(not isinstance(r,dict) or not isinstance(r.get('维度明细'),list) or len(r['维度明细'])!=6 or r.get('命中说明') is None or any(not isinstance(x,dict) or x.get('阈值') is None or not x.get('说明') for x in r.get('维度明细',[])) for r in rows):
+            notes.append('detect_laundering存在判定缺少维度明细/阈值/说明')
     elif name.endswith('scan_structure'):
         state=value.get('结论',{}).get('检测器状态',{})
         failures=[n for n,s in state.items() if isinstance(s,dict) and s.get('状态')=='失败']

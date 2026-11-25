@@ -41,7 +41,7 @@ def main():
     方法 = types.MethodType(ga.GamblingAnalyzer._detect_money_laundering, object())
 
     源码行, 源码说法 = 观测.找加分行(方法)
-    检查(len(源码行) == 6, '读源码：找到 6 处加分行 %s' % 源码行)
+    检查(len(源码行) == 7, '读源码：找到 7 处加分行 %s' % 源码行)
 
     字节行 = 观测._加分行从字节码(方法)
     检查(字节行 == 源码行, '读字节码：行号和读源码完全一致 %s' % 字节行)
@@ -59,7 +59,7 @@ def main():
         检查(False, '没有源码时不许崩（这条是第 4 次打包失败的真原因）')
     finally:
         inspect.getsourcelines = 原函数
-    检查(兜底行 == 源码行, '没有源码时：靠字节码读出同样的 6 行（读法：%s）' % 兜底说法)
+    检查(兜底行 == 源码行, '没有源码时：靠字节码读出同样的 %d 行（读法：%s）' % (len(源码行), 兜底说法))
 
     # 加分行的行号必须真是源码里那几行 `l_score += `
     原文 = (ROOT / 'gambling_analysis.py').read_text(encoding='utf-8').splitlines()

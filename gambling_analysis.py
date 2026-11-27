@@ -162,6 +162,33 @@ LIV_ON         = PACK.num('民生豁免开关')          # 0 = 关闭豁免，�
 LIV_OUT_SHARE  = PACK.num('民生转出占比下限')      # 转出里要这么多比例进了医院/学校这类单位才算缴费
 LIV_MIN_PAYERS = PACK.num('民生豁免最少付款人数')  # 钱得是好几个人凑的，一个人进出的是自己转自己
 LIV_KEYWORDS   = PACK.words('民生机构')            # 医院/学校/慈善这类单位的词，在 01_词表.csv 里改
+# ── 风险评分权重（2026-11-27 搬表：数值原样搬自 _score_suspects 写死值，零改动；详见 03_门槛.csv 行29）──
+RISK_FLOW_MAX       = PACK.num('风险资金满分')        # 资金量维度总分
+RISK_FLOW_IN_SHARE  = PACK.num('风险资金流入配比')    # 资金量里流入占比
+RISK_FLOW_NET_SHARE = PACK.num('风险资金净额配比')    # 资金量里净额占比
+RISK_FLOW_POWER     = PACK.num('风险资金曲线')        # 幂曲线，压大补小
+RISK_LEVEL_A1   = PACK.num('风险层级一级')            # 以下五个：各层级直接分
+RISK_LEVEL_A2   = PACK.num('风险层级二级')
+RISK_LEVEL_A3   = PACK.num('风险层级三级')
+RISK_LEVEL_GM   = PACK.num('风险层级赌客')
+RISK_LEVEL_UNK  = PACK.num('风险层级待定')
+RISK_LEVEL_MISS = PACK.num('风险层级兜底')            # 层级表里没有这个层级时给的分
+RISK_LAUNDER_FACTOR = PACK.num('风险洗钱系数')        # 洗钱分折算系数
+RISK_LAUNDER_CAP    = PACK.num('风险洗钱加分封顶')
+RISK_DEGREE_MAX   = PACK.num('风险中心度满分')
+RISK_DEGREE_POWER = PACK.num('风险中心度曲线')
+RISK_KW_BASE  = PACK.num('风险关键词底分')            # 命中一笔的打底分
+RISK_KW_HEAD  = PACK.num('风险关键词加头')            # 随命中占比最多再加这么多
+RISK_NIGHT_MAX = PACK.num('风险夜间满分')
+RISK_BURST_MAX = PACK.num('风险爆发满分')
+RISK_CREDIT_SETTLE  = PACK.num('风险特征结算')        # 以下七个：信用特征各加分
+RISK_CREDIT_ALLOC   = PACK.num('风险特征分配')
+RISK_LARGE_SETTLE   = PACK.num('风险特征大额')
+RISK_CREDIT_INJECT  = PACK.num('风险特征注入')
+RISK_ACCOUNTANT     = PACK.num('风险特征做账')
+RISK_SHARED_ACCT    = PACK.num('风险特征多人共用')
+RISK_ONEWAY         = PACK.num('风险特征单向')
+RISK_CREDIT_CAP     = PACK.num('风险特征封顶')
 
 if PACK_ERROR:
     PACK.封上()   # 上面的常量已取完空值；此后谁再用这份哑表取值，当场报错，不许拿 0 算
@@ -3251,43 +3278,44 @@ class GamblingAnalyzer:
             #    两者结合可防止 A→B→A 循环使 total_flow 虚增导致评分虚高
             in_flow_ratio  = info['in_flow'] / max_in_flow
             net_abs_ratio  = info.get('net_absolute', abs(info['in_flow'] - info['out_flow'])) / max_net_abs
-            flow_score_raw = 0.6 * (in_flow_ratio ** 0.6) + 0.4 * (net_abs_ratio ** 0.6)
-            score += 30 * flow_score_raw
+            flow_score_raw = (RISK_FLOW_IN_SHARE * (in_flow_ratio ** RISK_FLOW_POWER)
+                              + RISK_FLOW_NET_SHARE * (net_abs_ratio ** RISK_FLOW_POWER))
+            score += RISK_FLOW_MAX * flow_score_raw
 
             # 2) 层级（25分）：一级代理最高风险，赌客次之，待定外围最低
             level_score = {
-                LEVEL_AGENT1:  25,   # 一级代理
-                LEVEL_AGENT2:  18,   # 二级代理
-                LEVEL_AGENT3:  12,   # 三级代理
-                LEVEL_GAMBLER:  6,   # 赌客（也有法律风险，但比代理低）
-                LEVEL_UNKNOWN:  2,   # 待定外围
+                LEVEL_AGENT1:  RISK_LEVEL_A1,   # 一级代理
+                LEVEL_AGENT2:  RISK_LEVEL_A2,   # 二级代理
+                LEVEL_AGENT3:  RISK_LEVEL_A3,   # 三级代理
+                LEVEL_GAMBLER:  RISK_LEVEL_GM,  # 赌客（也有法律风险，但比代理低）
+                LEVEL_UNKNOWN:  RISK_LEVEL_UNK, # 待定外围
             }
-            score += level_score.get(info.get('level', LEVEL_UNKNOWN), 2)
+            score += level_score.get(info.get('level', LEVEL_UNKNOWN), RISK_LEVEL_MISS)
 
             # 2b) 洗钱嫌疑加分（最多额外 +15 分）
             launder_sc = info.get('launder_score', 0)
             if launder_sc > 0:
-                score += min(launder_sc * 0.15, 15)
+                score += min(launder_sc * RISK_LAUNDER_FACTOR, RISK_LAUNDER_CAP)
 
             # 3) 网络中心度（20分）：出度+入度越大，在团伙中枢纽作用越强
             # 防御性转换：确保度数是整数值
             degree_ratio = (int(info.get('in_degree', 0) or 0) + int(info.get('out_degree', 0) or 0)) / max_degree
-            score += 20 * (degree_ratio ** 0.7)
+            score += RISK_DEGREE_MAX * (degree_ratio ** RISK_DEGREE_POWER)
 
             # 4) 关键词命中（15分）：至少命中1笔即得基础分8，命中越多越接近15分
             kw = kw_hits_dict.get(nid, 0)
             if kw > 0:
-                score += 8 + 7 * min(kw / max_kw, 1.0)
+                score += RISK_KW_BASE + RISK_KW_HEAD * min(kw / max_kw, 1.0)
 
             # 5) 夜间交易比例（5分）
             night = night_dict.get(nid, 0)
             total = max(total_dict.get(nid, 1), 1)
             night_ratio = night / total
-            score += 5 * night_ratio
+            score += RISK_NIGHT_MAX * night_ratio
 
             # 6) 爆发性交易（5分）
             if nid in burst_nodes:
-                score += 5
+                score += RISK_BURST_MAX
 
             # 7) 信用额度相关特征（额外加分，最多 +15 分）
             credit_score = 0

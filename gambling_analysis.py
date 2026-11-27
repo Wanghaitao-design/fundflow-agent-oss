@@ -157,6 +157,11 @@ AGG_MAX_OUT_RATIO = PACK.num('归集沉淀流出比上限')    # 流出/流入 �
 AGG_MIN_RETAIN    = PACK.num('归集沉淀沉淀下限')      # 净沉淀/流入 要超过这条线 = 钱真的留在账上
 AGG_MIN_PAYER_DEG = PACK.num('归集沉淀最少付款人数')  # 至少几个独立账户往里打钱（单人打款是工资/还款不是归集）
 AGG_MIN_PAY_DAYS  = PACK.num('归集沉淀最少收款天数')  # 进账至少跨几个自然日（挡凑钱看病那种"收一天就转走"）
+# ── 民生转出豁免（2026-11-27 户主批准治「凑钱看病牵头人被冤枉」旧伤，详见 03_门槛.csv 末行）──
+LIV_ON         = PACK.num('民生豁免开关')          # 0 = 关闭豁免，退回老判法
+LIV_OUT_SHARE  = PACK.num('民生转出占比下限')      # 转出里要这么多比例进了医院/学校这类单位才算缴费
+LIV_MIN_PAYERS = PACK.num('民生豁免最少付款人数')  # 钱得是好几个人凑的，一个人进出的是自己转自己
+LIV_KEYWORDS   = PACK.words('民生机构')            # 医院/学校/慈善这类单位的词，在 01_词表.csv 里改
 
 if PACK_ERROR:
     PACK.封上()   # 上面的常量已取完空值；此后谁再用这份哑表取值，当场报错，不许拿 0 算
@@ -3071,6 +3076,26 @@ class GamblingAnalyzer:
                     agg_days[nid0] = int(
                         grp['datetime_parsed'].dropna().dt.normalize().nunique())
 
+        # ── 民生转出豁免预备（2026-11-27）─────────────────────────────────
+        #   好几个人凑钱、牵头人收齐转给医院/学校这类单位——缴费形状，不是跑分。
+        #   豁免只让 B高过路率 / C快速中转 两条不计数；A境外/D整千/E单线/F归集照抓。
+        liv_exempt: set = set()
+        if LIV_ON and LIV_KEYWORDS and 'is_income' in tx.columns:
+            out_tx = tx[tx['is_income'] == False]
+            for owner, grp in out_tx.groupby('owner_id'):
+                nid1 = str(owner)
+                if agg_payers.get(nid1, 0) < LIV_MIN_PAYERS:
+                    continue                       # 不是多人凑的钱
+                out_sum = float(grp['amount_clean'].sum())
+                if out_sum <= 0:
+                    continue
+                text = (grp['cp_key'].astype(str) + grp['remark'] + grp['desc'])
+                mask = pd.Series(False, index=grp.index)
+                for kw in LIV_KEYWORDS:
+                    mask |= text.str.contains(kw, case=False, na=False, regex=False)
+                if float(grp.loc[mask, 'amount_clean'].sum()) / out_sum >= LIV_OUT_SHARE:
+                    liv_exempt.add(nid1)           # 转出几乎全进了民生单位
+
         # ── 逐节点综合打分 ────────────────────────────────────────────────
         for node, info in self.nodes.items():
             nid   = str(node)
@@ -3097,8 +3122,8 @@ class GamblingAnalyzer:
                 flags.append(f'涉境外转账({ov_cnt}笔)')
                 l_score += 25
 
-            # B. 高过路率
-            if in_f > 0:
+            # B. 高过路率（民生豁免者不算，2026-11-27）
+            if in_f > 0 and nid not in liv_exempt:
                 transit_r = out_f / in_f
                 balance_r = abs(in_f - out_f) / max(in_f, 1)
                 if transit_r >= MONEY_LAUNDER_TRANSIT_RATIO and \
@@ -3107,8 +3132,8 @@ class GamblingAnalyzer:
                         f'高过路率({transit_r:.0%}流入后转出，净余额仅{balance_r:.0%})')
                     l_score += transit_r * 25
 
-            # C. 快速中转
-            if nid in fast_transit:
+            # C. 快速中转（民生豁免者不算，2026-11-27）
+            if nid in fast_transit and nid not in liv_exempt:
                 flags.append('快速中转（收款后24h内大额转出）')
                 l_score += 20
 
